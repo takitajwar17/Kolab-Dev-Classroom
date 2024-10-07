@@ -10,7 +10,7 @@ const SignUpPage = () => {
 
   return (
     <>
-      <div style={{ marginTop: '-70px' }}> {/* Adjust the negative margin as needed */}
+      <div style={{ marginTop: '-70px' }}> 
         <SignUp />
       </div>
     </>
