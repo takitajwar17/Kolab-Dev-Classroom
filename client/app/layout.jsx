@@ -12,8 +12,8 @@ const kanit = Kanit({
 });
 
 export const metadata = {
-  title: "Sprio Dev Classroom",
-  description: "Sprio Dev Classroom",
+  title: "Kolab",
+  description: "Dev Classroom",
 };
 
 export default function RootLayout({ children }) {
