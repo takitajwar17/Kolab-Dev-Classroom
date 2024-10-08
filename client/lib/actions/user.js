@@ -1,15 +1,15 @@
 "use server";
 
 import User from "../models/userModel";
-
 import { connect } from "../mongodb/mongoose";
 
 export const createOrUpdateUser = async (
-  id, first_name, last_name, image_url, email_addresses, username
+  id, first_name, last_name, image_url, email, username
 ) => {
   try {
     await connect();
-    console.log({id, first_name, last_name, image_url, email_addresses, username})
+    console.log("Creating/Updating user:", { id, first_name, last_name, image_url, email, username });
+    
     const user = await User.findOneAndUpdate(
       { clerkId: id },
       {
@@ -17,25 +17,29 @@ export const createOrUpdateUser = async (
           firstName: first_name,
           lastName: last_name,
           image_url: image_url,
-          email: email_addresses[0].email,
+          email: email,
           userName: username,
         },
       },
       { new: true, upsert: true }
     );
-    console.log(user)
+    
+    console.log("User after update:", user);
     return user;
   } catch (error) {
-    console.log("Error creating or updating user:", error);
+    console.error("Error creating or updating user:", error);
+    throw error;
   }
 };
 
 export const deleteUser = async (id) => {
   try {
     await connect();
-
-    await User.findOneAndDelete({ clerkId: id });
+    const result = await User.findOneAndDelete({ clerkId: id });
+    console.log("User deletion result:", result);
+    return result;
   } catch (error) {
-    console.log("Error deleting user:", error);
+    console.error("Error deleting user:", error);
+    throw error;
   }
 };

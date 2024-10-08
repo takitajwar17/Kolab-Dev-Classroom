@@ -15,8 +15,8 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   image_url: {
-    type: String, // URL to the image
-    required: false, // Optional field
+    type: String,
+    required: false,
   },
   email: {
     type: String,
@@ -32,6 +32,6 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 
 export default User;
