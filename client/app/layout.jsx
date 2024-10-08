@@ -4,6 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { light } from "@clerk/themes";
 import Header from "./components/Header";
 import { Analytics } from "@vercel/analytics/react"
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 // const inter = Inter({ subsets: ["latin"] });
 const kanit = Kanit({
@@ -33,6 +34,7 @@ export default function RootLayout({ children }) {
             </div>
           </main>
           <Analytics />
+          <SpeedInsights />
         </body>
       </html>
     </ClerkProvider>
