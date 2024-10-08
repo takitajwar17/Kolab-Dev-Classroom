@@ -3,6 +3,7 @@ import { Inter, Kanit } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { light } from "@clerk/themes";
 import Header from "./components/Header";
+<<<<<<< HEAD
 import Sidebar from "./components/Sidebar";
 
 // const inter = Inter({ subsets: ["latin"] });
@@ -13,8 +14,8 @@ const kanit = Kanit({
 });
 
 export const metadata = {
-  title: "Sprio Dev Classroom",
-  description: "Sprio Dev Classroom",
+  title: "Kolab",
+  description: "Dev Classroom",
 };
 
 export default function RootLayout({ children }) {
@@ -33,6 +34,8 @@ export default function RootLayout({ children }) {
               <div className="mt-20">{children}</div>
             </div>
           </main>
+          <Analytics />
+          <SpeedInsights />
         </body>
       </html>
     </ClerkProvider>

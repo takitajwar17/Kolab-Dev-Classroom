@@ -10,7 +10,9 @@ const SignUpPage = () => {
 
   return (
     <>
-      <SignUp />
+      <div style={{ marginTop: '-70px' }}> 
+        <SignUp />
+      </div>
     </>
   );
 };
