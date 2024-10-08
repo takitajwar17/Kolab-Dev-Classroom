@@ -11,6 +11,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    userName:{
+        type:String,
+        required: true,
+    },
     firstName: {
         type: String,
         required: true,
@@ -22,7 +26,13 @@ const userSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now,
+    }, 
+    image: {
+        type: String, // URL to the image
+        required: false, // Optional field
     }
+   
+
 });
 
 const User = mongoose.model('User', userSchema);
