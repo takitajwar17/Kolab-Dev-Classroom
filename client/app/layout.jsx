@@ -4,9 +4,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { light } from "@clerk/themes";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
-import { Analytics } from "@vercel/analytics/react"
-import { SpeedInsights } from '@vercel/speed-insights/next';
-
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 // const inter = Inter({ subsets: ["latin"] });
 const kanit = Kanit({
@@ -16,8 +15,8 @@ const kanit = Kanit({
 });
 
 export const metadata = {
-  title: "Sprio Dev Classroom",
-  description: "Sprio Dev Classroom",
+  title: "Kolab",
+  description: "Dev Classroom",
 };
 
 export default function RootLayout({ children }) {
