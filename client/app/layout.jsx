@@ -7,7 +7,6 @@ import Sidebar from "./components/Sidebar";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-// const inter = Inter({ subsets: ["latin"] });
 const kanit = Kanit({
   subsets: ["latin"],
   display: "swap",
@@ -35,6 +34,8 @@ export default function RootLayout({ children }) {
               <div className="mt-20">{children}</div>
             </div>
           </main>
+          <Analytics />
+          <SpeedInsights />
         </body>
       </html>
     </ClerkProvider>
