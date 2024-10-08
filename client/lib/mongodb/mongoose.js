@@ -1,24 +1,24 @@
 import mongoose from 'mongoose';
 
-let initialized=false;
+let initialized = false;
 
-export const cnnect= async()=>{
-    mongoose.set('strictQuery,true');
+export const connect = async () => {
+  mongoose.set('strictQuery', true);
 
-    if(initialized){
-        console.log('Mongodb already connected')
-        return;
-    }
+  if (initialized) {
+    console.log('Mongodb already connected');
+    return;
+  }
 
-    try{
-        await mongoose.connect(process.env.MONGODB_URI,{
-              dbName:'Kolab_Classsroom',
-              useNewUrlParser: true,
-              useUnifiedTopology: true,
-        });
-        console.log('Mongodb connected');
-    }catch(error){
-        console.log("Mongodb connection error: ",error);
-    }
-
-}
+  try {
+    await mongoose.connect(process.env.MONGODB_URI, {
+      dbName: 'Kolab_Classroom',
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    initialized = true;
+    console.log('Mongodb connected');
+  } catch (error) {
+    console.log('Mongodb connection error:', error);
+  }
+};
