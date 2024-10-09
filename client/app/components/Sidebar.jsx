@@ -1,13 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import {
-  FaHome,
-  FaUser,
-  FaCog,
-  FaChevronDown,
-  FaCodepen,
-} from "react-icons/fa";
+import { FaChevronDown, FaCodepen } from "react-icons/fa";
 import {
   TbLayoutDashboardFilled,
   TbLayoutSidebarLeftCollapseFilled,
@@ -31,13 +25,10 @@ const Sidebar = () => {
   return (
     <div className="flex flex-row">
       <div
-        className={`fixed top-0 left-0 h-full bg-black transition-transform ${
+        className={`fixed top-["4.75rem"] left-0 h-full bg-black transition-transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } `}
       >
-        <button onClick={toggleSidebar} className="p-4">
-          <TbLayoutSidebarLeftCollapseFilled color="white" fontSize="22px" />
-        </button>
         <nav className="flex flex-col w-56 p-4 pr-12 space-y-4">
           <Link
             href="/"
@@ -93,14 +84,31 @@ const Sidebar = () => {
           </Link>
         </nav>
       </div>
-      <div className={"mt-2 p-2 bg-black flex rounded-r-md"}>
-        <button
-          onClick={toggleSidebar}
-          onMouseOver={({ target }) => (target.style.color = "#cf4500")}
-          onMouseOut={({ target }) => (target.style.color = "white")}
-        >
-          <TbLayoutSidebarLeftExpandFilled color="#cf4500" fontSize="22px" />
-        </button>
+      <div
+        className={`${
+          isOpen ? "translate-x-56" : "translate-x-0"
+        } mt-2 p-2 bg-black flex rounded-r-md transition-transform`}
+      >
+        {!isOpen ? (
+          <button
+            onClick={toggleSidebar}
+            onMouseOver={({ target }) => (target.style.color = "#cf4500")}
+            onMouseOut={({ target }) => (target.style.color = "white")}
+          >
+            <TbLayoutSidebarLeftExpandFilled color="#cf4500" fontSize="22px" />
+          </button>
+        ) : (
+          <button
+            onClick={toggleSidebar}
+            onMouseOver={({ target }) => (target.style.color = "#cf4500")}
+            onMouseOut={({ target }) => (target.style.color = "white")}
+          >
+            <TbLayoutSidebarLeftCollapseFilled
+              color="#cf4500"
+              fontSize="22px"
+            />
+          </button>
+        )}
       </div>
     </div>
   );
