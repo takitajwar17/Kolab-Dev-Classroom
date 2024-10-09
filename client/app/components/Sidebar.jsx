@@ -11,7 +11,7 @@ import { SiGoogleclassroom } from "react-icons/si";
 import { MdAddBox, MdNotifications } from "react-icons/md";
 
 const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
 
   const toggleSidebar = () => {
