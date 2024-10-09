@@ -23,7 +23,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="flex flex-row">
+    <div className="pt-20 flex flex-row">
       <div
         className={`fixed top-["4.75rem"] left-0 h-full bg-black transition-transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
@@ -85,7 +85,7 @@ const Sidebar = () => {
         </nav>
       </div>
       <div
-        className={`${
+        className={`fixed ${
           isOpen ? "translate-x-56" : "translate-x-0"
         } mt-2 p-2 bg-black flex rounded-r-md transition-transform`}
       >
