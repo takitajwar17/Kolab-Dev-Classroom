@@ -9,7 +9,7 @@ const Header = async ({ username }) => {
   const { userId } = auth();
 
   return (
-    <nav className="flex items-center h-20 justify-between px-8 py-4 bg-black">
+    <nav className="fixed top-0 left-0 right-0 z-50 h-20 flex items-center justify-between px-8 py-4 bg-black">
       {/* Logo Section */}
       <div className="flex items-center">
         <Link href="/">
