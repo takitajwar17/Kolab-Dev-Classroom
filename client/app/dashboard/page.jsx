@@ -1,8 +1,10 @@
 const Dashboard = () => {
   return (
     <>
-      <h1 className='text-2xl font-bold mb-5'>Dashboard</h1>
-      <p className='mb-5'>Welcome to the dashboard!</p>
+      <div className="min-h-full min-w-full">
+        <h1 className="text-2xl font-bold mb-5 text-white">Dashboard</h1>
+        <p className="mb-5 text-white">Welcome to the dashboard!</p>
+      </div>
     </>
   );
 };
