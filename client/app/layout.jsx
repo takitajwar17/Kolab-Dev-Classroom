@@ -29,8 +29,9 @@ export default function RootLayout({ children }) {
         <body className={kanit.className}>
           <Header />
           <Sidebar />
-          <main className="">
-            <div className="flex items-start justify-center min-h-screen bg-charcoal">
+          <main>
+            {/* remove bg-charcoal later */}
+            <div className="flex items-start justify-center min-h-screen min-w-full bg-orange bg-opacity-30">
               <div className="w-full h-full">{children}</div>
             </div>
           </main>
