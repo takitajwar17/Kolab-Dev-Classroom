@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from 'react';
-import { SignUp } from '@clerk/nextjs';
+import { useEffect } from "react";
+import { SignUp } from "@clerk/nextjs";
 
 const SignUpPage = () => {
   useEffect(() => {
@@ -10,7 +10,7 @@ const SignUpPage = () => {
 
   return (
     <>
-      <div style={{ marginTop: '-70px' }}> 
+      <div className="flex justify-center mt-6">
         <SignUp />
       </div>
     </>

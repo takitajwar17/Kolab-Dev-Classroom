@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect } from 'react';
-import { SignIn } from '@clerk/nextjs';
+import { useEffect } from "react";
+import { SignIn } from "@clerk/nextjs";
 
 const SignInPage = () => {
   useEffect(() => {
@@ -10,7 +10,9 @@ const SignInPage = () => {
 
   return (
     <>
-      <SignIn />
+      <div className="flex justify-center w-full mt-6">
+        <SignIn />
+      </div>
     </>
   );
 };
