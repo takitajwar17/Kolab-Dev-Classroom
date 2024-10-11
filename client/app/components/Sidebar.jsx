@@ -31,21 +31,21 @@ const Sidebar = () => {
       >
         <nav className="flex flex-col w-56 p-4 pr-12 space-y-4">
           <Link
-            href="/"
+            href="/dashboard"
             className="flex items-center text-white hover:text-orange"
           >
             <TbLayoutDashboardFilled className="mr-2" />
             Dashboard
           </Link>
           <Link
-            href="/"
+            href="/courses"
             className="flex items-center text-white hover:text-orange"
           >
             <SiGoogleclassroom className="mr-2" />
             Courses
           </Link>
           <Link
-            href="/"
+            href="/projects"
             className="flex items-center text-white hover:text-orange"
           >
             <FaCodepen className="mr-2" />

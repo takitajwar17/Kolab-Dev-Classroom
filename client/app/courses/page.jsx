@@ -37,28 +37,29 @@ const CourseSection = () => {
             </button>
           ))}
         </div>
-
         {/* Search Bar */}
-        <div className="relative">
+        <div className="flex items-center ml-auto bg-gray-100 p-2 rounded-lg w-full max-w-2xl max-h-10">
           <input
             type="text"
-            placeholder="Search"
-            className="w-full px-4 py-2 bg-gray-100 text-gray-700 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange"
+            placeholder="Search..."
+            className="bg-transparent outline-none text-gray-700 w-full py-0.25 px-2"
           />
-          <svg
-            className="absolute right-3 top-2.5 w-5 h-5 text-gray-400"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M21 21l-4.35-4.35m1.93-5.73A7.5 7.5 0 1110.5 3a7.5 7.5 0 017.5 7.5z"
-            />
-          </svg>
+          <button className="text-gray-500 hover:text-gray-700">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="w-4 h-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-4.35-4.35M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14z"
+              />
+            </svg>
+          </button>
         </div>
       </div>
 
