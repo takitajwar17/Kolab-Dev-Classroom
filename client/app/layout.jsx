@@ -1,11 +1,11 @@
 import "./globals.css";
-import { Inter, Kanit } from "next/font/google";
+import { Kanit } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { light } from "@clerk/themes";
 import Header from "./components/Header";
-import Sidebar from "./components/Sidebar";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import ClientLayout from "./components/ClientLayout";
 
 const kanit = Kanit({
   subsets: ["latin"],
@@ -28,13 +28,15 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <body className={kanit.className}>
           <Header />
-          <Sidebar />
-          <main>
-            {/* remove bg-charcoal later */}
-            <div className="flex items-start justify-center min-h-screen min-w-full bg-orange bg-opacity-30">
-              <div className="w-full h-full">{children}</div>
-            </div>
-          </main>
+          {/* Retain ClientLayout to manage conditional Sidebar rendering */}
+          <ClientLayout>
+            <main>
+              {/* Keep the new background styling from the incoming changes */}
+              <div className="flex items-start justify-center min-h-screen min-w-full bg-orange bg-opacity-30">
+                <div className="w-full h-full">{children}</div>
+              </div>
+            </main>
+          </ClientLayout>
           <Analytics />
           <SpeedInsights />
         </body>

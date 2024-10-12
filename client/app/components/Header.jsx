@@ -13,8 +13,7 @@ const Header = async ({ username }) => {
       {/* Logo Section */}
       <div className="flex items-center">
         <Link href="/">
-          <Image src={KolabLogo} alt="Kolab Logo" width={80} height={40} />{" "}
-          {/* Adjust size as needed */}
+          <Image src={KolabLogo} alt="Kolab Logo" width={80} height={40} />
         </Link>
       </div>
 
@@ -27,7 +26,7 @@ const Header = async ({ username }) => {
             </Link>
             <Link
               href="sign-up"
-              className="bg-orange text-white py-2 px-4 rounded hover:bg-orange-700"
+              className="bg-[#cf4500] text-white py-2 px-4 rounded hover:bg-[#323231] transition duration-300"
             >
               Sign up
             </Link>
