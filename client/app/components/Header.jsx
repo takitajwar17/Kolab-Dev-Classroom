@@ -33,8 +33,11 @@ const Header = async ({ username }) => {
           </>
         )}
         {userId && (
-          <Link href="profile" className="text-gray-300 hover:text-white mr-4">
-            Profile
+          <Link
+            href="dashboard"
+            className="text-gray-300 hover:text-white mr-4"
+          >
+            Dashboard
           </Link>
         )}
         <div className="ml-4">
