@@ -3,7 +3,7 @@ import Link from "next/link";
 import { UserButton, auth } from "@clerk/nextjs";
 
 // Import the logo image
-import KolabLogo from "../../public/kolab-logo-white.png";
+import KolabLogo from "../../public/kolab-logo-white-w-icon.png";
 
 const Header = async ({ username }) => {
   const { userId } = auth();
@@ -13,7 +13,7 @@ const Header = async ({ username }) => {
       {/* Logo Section */}
       <div className="flex items-center">
         <Link href="/">
-          <Image src={KolabLogo} alt="Kolab Logo" width={80} height={40} />
+          <Image src={KolabLogo} alt="Kolab Logo" width={96} />
         </Link>
       </div>
 
