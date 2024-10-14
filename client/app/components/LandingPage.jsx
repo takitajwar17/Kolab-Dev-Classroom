@@ -140,12 +140,12 @@ const LandingPage = () => {
           >
             Tailored for Every Role
           </motion.h2>
-          <div className="flex justify-center space-x-4 mb-8">
+          <div className="flex flex-col sm:flex-row justify-center space-x-0 sm:space-x-4 mb-8">
             {useCases.map((useCase) => (
               <button
                 key={useCase.role}
                 onClick={() => setSelectedRole(useCase.role)}
-                className={`px-6 py-2 rounded-full text-lg font-semibold transition-colors ${
+                className={`w-full sm:w-auto px-6 py-2 rounded-full text-lg font-semibold transition-colors ${
                   selectedRole === useCase.role
                     ? 'bg-[#cf4500] text-white'
                     : 'bg-white text-[#cf4500] hover:bg-[#cf4500] hover:text-white'
