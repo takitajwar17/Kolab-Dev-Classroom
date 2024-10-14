@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsThreeDotsVertical, BsPlus } from "react-icons/bs";
 
 const CourseSection = () => {
   const [activeTab, setActiveTab] = useState("All");
@@ -17,6 +17,8 @@ const CourseSection = () => {
 
   const [menuOpen, setMenuOpen] = useState(null);
   const menuRef = useRef(null);
+  const [plusMenuOpen, setPlusMenuOpen] = useState(false);
+  const plusMenuRef = useRef(null); 
 
   // Close the menu if user clicks outside of it
   useEffect(() => {
@@ -46,11 +48,51 @@ const CourseSection = () => {
   const handleDelete = (id) => {
     // Handle delete logic here
   };
+  const handleJoinCourse = () => {
+    // Handle join course
+    console.log("Join Course clicked");
+  };
+
+  const handleCreateCourse = () => {
+    // Handle create course
+    console.log("Create Course clicked");
+  };
 
   return (
     <div className="bg-white min-h-screen px-12 pt-4 text-gray-800">
       {/* Title and Horizontal Rule */}
-      <h1 className="text-3xl font-bold mb-2">Courses</h1>
+      
+      <div className="flex justify-between items-center mb-4">
+         <h1 className="text-3xl font-bold mb-2">Courses</h1>
+         <div className="relative" ref={plusMenuRef}>
+         <button
+            className=" text-orange  hover:bg-orange-700 font-bold text-4xl p-2 rounded-full"
+            onClick={() => setPlusMenuOpen(!plusMenuOpen)}
+          >
+            <BsPlus size={36} />
+          </button>
+          {plusMenuOpen && (
+            <div className="absolute right-0 mt-2 w-36 bg-white border-2 border-gray-200 rounded-lg shadow-lg">
+              <ul className="text-left">
+                <li
+                  className="px-4 py-2 text-gray-700 hover:bg-gray-400 cursor-pointer"
+                  onClick={handleJoinCourse}
+                >
+                  Join Course
+                </li>
+                <li
+                  className="px-4 py-2 text-gray-700 hover:bg-gray-400 cursor-pointer"
+                  onClick={handleCreateCourse}
+                >
+                  Create Course
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+            
+        </div>
+      
       <hr className="mb-4" />
       {/* Tabs and Search Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
