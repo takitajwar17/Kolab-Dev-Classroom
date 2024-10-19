@@ -12,7 +12,7 @@ export default function ClientLayout({ children }) {
   return (
     <>
       {!isHomePage && <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />}
-      <main className={`w-full ${isOpen ? "md:pl-56" : ""}`}>
+      <main className={`w-full ${isOpen && !isHomePage ? "md:pl-56" : ""}`}>
         {" "}
         <div className="flex items-start justify-center min-h-screen w-full">
           <div className="w-full">{children}</div>
