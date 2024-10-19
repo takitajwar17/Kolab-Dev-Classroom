@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { LuDices } from "react-icons/lu";
 import { nanoid } from "nanoid";
+import { createOrUpdateCourse } from '../../../lib/actions/course';
 
 const CreateCoursePage = () => {
   const [schedule, setSchedule] = useState([{ day: "", time: "" }]);
@@ -30,7 +31,7 @@ const CreateCoursePage = () => {
     setCourseCode(newCode);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Check if any field is missing
@@ -51,6 +52,16 @@ const CreateCoursePage = () => {
       courseCode,
       schedule,
     });
+
+    try {
+      // Call the createOrUpdateCourse function to save the data
+      const course = await createOrUpdateCourse(title, details, courseCode, schedule);
+      console.log("Course created/updated:", course);
+      alert("Course created/updated successfully!");
+    } catch (error) {
+      console.error("Error creating/updating course:", error);
+      alert("Error creating/updating course. Please try again.");
+    }
   };
 
   return (
