@@ -1,18 +1,21 @@
 "use client";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { BsThreeDotsVertical, BsPlus } from "react-icons/bs";
 
 const CourseSection = () => {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("All");
   const tabs = ["All", "Latest", "Owned", "Enrolled", "Archived"];
 
   // Demo course details
   const courses = [
-    { title: "Course 1", description: "Description for Course 1" },
-    { title: "Course 2", description: "Description for Course 2" },
-    { title: "Course 3", description: "Description for Course 3" },
-    { title: "Course 4", description: "Description for Course 4" },
+    { id: "1", title: "Course 1", description: "Description for Course 1" },
+    { id: "2", title: "Course 2", description: "Description for Course 2" },
+    { id: "3", title: "Course 3", description: "Description for Course 3" },
+    { id: "4", title: "Course 4", description: "Description for Course 4" },
     // Add more courses as needed
   ];
 
@@ -22,24 +25,26 @@ const CourseSection = () => {
   const plusMenuRef = useRef(null);
 
   // Close the menu if user clicks outside of it
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setMenuOpen(null); // Close the menu
-      }
-    };
+  // Issue: Menu gets closed even if I try to click on 'Edit/Archive/Delete'
+  // useEffect(() => {
+  //   const handleClickOutside = (event) => {
+  //     if (menuRef.current && !menuRef.current.contains(event.target)) {
+  //       setMenuOpen(null); // Close the menu
+  //     }
+  //   };
 
-    // Add event listener to the document
-    document.addEventListener("mousedown", handleClickOutside);
+  //   // Add event listener to the document
+  //   document.addEventListener("mousedown", handleClickOutside);
 
-    // Cleanup the event listener when the component unmounts
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [menuOpen]);
+  //   // Cleanup the event listener when the component unmounts
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [menuOpen]);
 
   const handleEdit = (id) => {
     // Handle edit logic here
+    router.push(`/courses/edit-course/${id}`);
   };
 
   const handleArchive = (id) => {
@@ -67,10 +72,10 @@ const CourseSection = () => {
             <div className="absolute right-0 mt-2 w-36 bg-white border-2 border-gray-200 rounded-lg shadow-lg">
               <ul className="text-left">
                 <li className="w-full rounded-lg px-2 py-2 text-center text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  <Link href="/join-class">Join Course</Link>
+                  <Link href="/courses/join-class">Join Course</Link>
                 </li>
                 <li className="w-full rounded-lg px-2 py-2 text-center text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  <Link href="/create-course">Create Course</Link>
+                  <Link href="/courses/create-course">Create Course</Link>
                 </li>
               </ul>
             </div>
