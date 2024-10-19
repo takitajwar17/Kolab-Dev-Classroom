@@ -17,6 +17,7 @@
     "eslint-config-next": "^14.2.15",
     "framer-motion": "^11.11.4",
     "mongoose": "^8.7.1",
+    "nanoid": "^5.0.7",
     "next": "^14.2.15",
     "postcss": "8.4.24",
     "react": "^18.3.1",
