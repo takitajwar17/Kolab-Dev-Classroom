@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-
-const courseSchema = new mongoose.Schema({
+const {Schema} =mongoose;
+const courseSchema = new Schema({
   title: {
     type: String,
     required: true,
@@ -8,7 +8,7 @@ const courseSchema = new mongoose.Schema({
   description: {
     type: String,
   },
-  code: {
+  courseCode: {
     type: String,
     required: true,
     unique: true
@@ -16,7 +16,7 @@ const courseSchema = new mongoose.Schema({
   creator: {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    // required: true
   },
   tasks: [{
     type: Schema.Types.ObjectId,
@@ -30,13 +30,7 @@ const courseSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Generate a random code for the course
-// courseSchema.pre('save', function(next) {
-//   if (!this.code) {
-//     this.code = Math.random().toString(36).substring(2, 8).toUpperCase();
-//   }
-//   next();
-// });
+
 
 const Course = mongoose.models.Course || mongoose.model('Course', courseSchema);
 module.exports = Course;
