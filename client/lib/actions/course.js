@@ -9,7 +9,7 @@ export const createOrUpdateCourse = async (title, details, courseCode) => {
     console.log("Creating/updating course: ", { title, details, courseCode });
 
     const course = await Course.findOneAndUpdate(
-      { courseCode: courseCode },
+      { title: title },
       {
         $set: {
           title: title,
