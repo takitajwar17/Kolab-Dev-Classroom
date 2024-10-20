@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { LuDices } from "react-icons/lu";
 import { nanoid } from "nanoid";
-import { createOrUpdateCourse } from '../../../lib/actions/course';
+import { createCourse } from '../../../lib/actions/course';
+import { useAuth } from "@clerk/nextjs"; // Import useAuth to get the authenticated user
 
 const CreateCoursePage = () => {
+  const { userId } = useAuth(); // Get the authenticated user's ID
   const [schedule, setSchedule] = useState([{ day: "", time: "" }]);
   const [courseCode, setCourseCode] = useState("");
   const [title, setTitle] = useState("");
@@ -51,16 +53,17 @@ const CreateCoursePage = () => {
       details,
       courseCode,
       schedule,
+      //creator: userId, // Include creator
     });
 
     try {
-      // Call the createOrUpdateCourse function to save the data
-      const course = await createOrUpdateCourse(title, details, courseCode, schedule);
-      console.log("Course created/updated:", course);
-      alert("Course created/updated successfully!");
+      // Call the createCourse function to save the data
+      const course = await createCourse(title, details, courseCode, userId); // Pass creator
+      console.log("Course created:", course);
+      alert("Course created successfully!");
     } catch (error) {
-      console.error("Error creating/updating course:", error);
-      alert("Error creating/updating course. Please try again.");
+      console.error("Error creating course:", error);
+      alert("Error creating course. Please try again.");
     }
   };
 

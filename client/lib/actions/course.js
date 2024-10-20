@@ -3,27 +3,22 @@
 import Course from "../models/courseModel";
 import { connect } from "../mongodb/mongoose";
 
-export const createOrUpdateCourse = async (title, details, courseCode) => {
+export const createCourse = async (title, details, courseCode, creator) => {
   try {
     await connect();
-    console.log("Creating/updating course: ", { title, details, courseCode });
+    console.log("Creating course: ", { title, details, courseCode, creator });
 
-    const course = await Course.findOneAndUpdate(
-      { title: title },
-      {
-        $set: {
-          title: title,
-          description: details,
-          courseCode: courseCode,
-        },
-      },
-      { new: true, upsert: true }
-    );
+    const course = await Course.create({
+      title: title,
+      description: details,
+      courseCode: courseCode,
+      creator: creator, // Ensure creator is passed as a string
+    });
 
-    console.log("Course after update:", course);
+    console.log("Course created:", course);
     return course.toObject(); // Convert Mongoose document to plain object
   } catch (error) {
-    console.error("Error creating or updating course:", error);
+    console.error("Error creating course:", error);
     throw error;
   }
 };

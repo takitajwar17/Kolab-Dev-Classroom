@@ -14,9 +14,8 @@ const courseSchema = new Schema({
     unique: true
   },
   creator: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    // required: true
+    type: String,
+    required :true
   },
   tasks: [{
     type: Schema.Types.ObjectId,
