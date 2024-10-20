@@ -9,16 +9,7 @@ const CourseSection = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("All");
   const tabs = ["All", "Latest", "Owned", "Enrolled", "Archived"];
-
-  // Demo course details
-  const courses = [
-    { id: "1", title: "Course 1", description: "Description for Course 1" },
-    { id: "2", title: "Course 2", description: "Description for Course 2" },
-    { id: "3", title: "Course 3", description: "Description for Course 3" },
-    { id: "4", title: "Course 4", description: "Description for Course 4" },
-    // Add more courses as needed
-  ];
-
+  const [courses, setCourses] = useState([]);
   const [menuOpen, setMenuOpen] = useState(null);
   const menuRef = useRef(null);
   const [plusMenuOpen, setPlusMenuOpen] = useState(false);
@@ -41,7 +32,24 @@ const CourseSection = () => {
   //     document.removeEventListener("mousedown", handleClickOutside);
   //   };
   // }, [menuOpen]);
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("/api/courses/owned");
+        if (response.ok) {
+          const data = await response.json();
+          setCourses(data);
+        } else {
+          console.error("Failed to fetch courses");
+        }
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
 
+    fetchCourses();
+  }, []);
+  
   const handleEdit = (id) => {
     // Handle edit logic here
     router.push(`/courses/edit-course/${id}`);
