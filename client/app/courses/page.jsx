@@ -1,41 +1,23 @@
 "use client";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { BsThreeDotsVertical, BsPlus } from "react-icons/bs";
+import { BsPlus, BsThreeDotsVertical } from "react-icons/bs";
 
 const CourseSection = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("All");
   const tabs = ["All", "Latest", "Owned", "Enrolled", "Archived"];
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState({ owned: [], enrolled: [] });
   const [menuOpen, setMenuOpen] = useState(null);
   const menuRef = useRef(null);
   const [plusMenuOpen, setPlusMenuOpen] = useState(false);
   const plusMenuRef = useRef(null);
 
-  // Close the menu if user clicks outside of it
-  // Issue: Menu gets closed even if I try to click on 'Edit/Archive/Delete'
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (menuRef.current && !menuRef.current.contains(event.target)) {
-  //       setMenuOpen(null); // Close the menu
-  //     }
-  //   };
-
-  //   // Add event listener to the document
-  //   document.addEventListener("mousedown", handleClickOutside);
-
-  //   // Cleanup the event listener when the component unmounts
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [menuOpen]);
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch("/api/courses/owned");
+        const response = await fetch("/api/courses/all-courses");
         if (response.ok) {
           const data = await response.json();
           setCourses(data);
@@ -49,11 +31,9 @@ const CourseSection = () => {
 
     fetchCourses();
   }, []);
-  
+
   const handleEdit = (id) => {
-    // Handle edit logic here
     router.push(`/courses/edit-course/${id}`);
-    console.log(id);
   };
 
   const handleArchive = (id) => {
@@ -63,6 +43,24 @@ const CourseSection = () => {
   const handleDelete = (id) => {
     // Handle delete logic here
   };
+
+  let displayedCourses = [];
+
+  if (activeTab === "All") {
+    displayedCourses = [...courses.owned, ...courses.enrolled];
+  } else if (activeTab === "Owned") {
+    displayedCourses = courses.owned;
+  } else if (activeTab === "Enrolled") {
+    displayedCourses = courses.enrolled;
+  } else if (activeTab === "Latest") {
+    displayedCourses = [...courses.owned, ...courses.enrolled].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+  } else if (activeTab === "Archived") {
+    displayedCourses = [...courses.owned, ...courses.enrolled].filter(
+      (course) => course.archived
+    );
+  }
 
   return (
     <div className="bg-white min-h-screen px-12 pt-4 text-gray-800">
@@ -138,7 +136,7 @@ const CourseSection = () => {
 
       {/* Cards Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {courses.map((course, index) => (
+        {displayedCourses.map((course, index) => (
           <div
             key={index}
             className="bg-gray-100 p-6 rounded-lg shadow-md hover:shadow-lg transition"
