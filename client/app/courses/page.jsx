@@ -13,6 +13,7 @@ const CourseSection = () => {
   const menuRefs = useRef([]);
   const [plusMenuOpen, setPlusMenuOpen] = useState(false);
   const plusMenuRef = useRef(null);
+  const [loading, setLoading] = useState(true); // Loading state
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -36,6 +37,8 @@ const CourseSection = () => {
         }
       } catch (error) {
         console.error("Error fetching courses:", error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching
       }
     };
 
@@ -96,15 +99,53 @@ const CourseSection = () => {
     );
   }
 
+  // Loading Screen
+  if (loading) {
+    return (
+      <div className="bg-white min-h-screen px-12 pt-4 text-gray-800">
+        {/* Title and Horizontal Rule */}
+        <div className="flex justify-between items-center">
+          <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+          <div className="h-8 bg-gray-200 rounded w-8"></div>
+        </div>
+        <hr className="mb-4" />
+        {/* Tabs and Search Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          {/* Tabs */}
+          <div className="flex flex-wrap gap-3">
+            {tabs.map((tab, index) => (
+              <div
+                key={index}
+                className="h-10 bg-gray-200 rounded-lg w-20"
+              ></div>
+            ))}
+          </div>
+          {/* Search Bar */}
+          <div className="h-10 bg-gray-200 rounded-lg w-full max-w-2xl"></div>
+        </div>
+        {/* Cards Section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(6)].map((_, index) => (
+            <div key={index} className="bg-gray-100 p-6 rounded-lg shadow-md">
+              <div className="h-6 bg-gray-200 rounded w-2/3 mb-4"></div>
+              <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+              <div className="h-4 bg-gray-200 rounded w-5/6 mb-4"></div>
+              <div className="h-10 bg-gray-200 rounded w-32"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white min-h-screen px-12 pt-4 text-gray-800">
       {/* Title and Horizontal Rule */}
-
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold mb-2">Courses</h1>
         <div className="relative" ref={plusMenuRef}>
           <button
-            className=" text-orange  hover:bg-orange-700 font-bold text-4xl p-2 rounded-full"
+            className="text-orange hover:bg-orange-700 font-bold text-4xl p-2 rounded-full"
             onClick={() => setPlusMenuOpen(!plusMenuOpen)}
           >
             <BsPlus size={36} />
