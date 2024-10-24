@@ -53,7 +53,7 @@ const CreateCoursePage = () => {
       details,
       courseCode,
       schedule,
-      //creator: userId, // Include creator
+      creator: userId, // Include creator
     });
 
     try {

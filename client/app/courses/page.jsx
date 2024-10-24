@@ -53,6 +53,7 @@ const CourseSection = () => {
   const handleEdit = (id) => {
     // Handle edit logic here
     router.push(`/courses/edit-course/${id}`);
+    console.log(id);
   };
 
   const handleArchive = (id) => {
@@ -163,7 +164,7 @@ const CourseSection = () => {
                     <ul className="text-left">
                       <li
                         className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => handleEdit(course.id)}
+                        onClick={() => handleEdit(course._id)}
                       >
                         Edit
                       </li>
