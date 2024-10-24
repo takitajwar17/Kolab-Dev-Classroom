@@ -10,7 +10,7 @@ const CourseSection = () => {
   const tabs = ["All", "Latest", "Owned", "Enrolled", "Archived"];
   const [courses, setCourses] = useState({ owned: [], enrolled: [] });
   const [menuOpen, setMenuOpen] = useState(null);
-  const menuRef = useRef(null);
+  const menuRefs = useRef([]);
   const [plusMenuOpen, setPlusMenuOpen] = useState(false);
   const plusMenuRef = useRef(null);
 
@@ -20,7 +20,17 @@ const CourseSection = () => {
         const response = await fetch("/api/courses/all-courses");
         if (response.ok) {
           const data = await response.json();
-          setCourses(data);
+
+          // Add a 'courseType' property to each course
+          const ownedCourses = data.owned.map((course) => ({
+            ...course,
+            courseType: "owned",
+          }));
+          const enrolledCourses = data.enrolled.map((course) => ({
+            ...course,
+            courseType: "enrolled",
+          }));
+          setCourses({ owned: ownedCourses, enrolled: enrolledCourses });
         } else {
           console.error("Failed to fetch courses");
         }
@@ -36,12 +46,16 @@ const CourseSection = () => {
     router.push(`/courses/edit-course/${id}`);
   };
 
-  const handleArchive = (id) => {
+  const handleArchive = (id, courseType) => {
     // Handle archive logic here
+    // For enrolled courses, this might mean archiving it from the user's view
+    // For owned courses, it might archive the course entirely
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id, courseType) => {
     // Handle delete logic here
+    // For enrolled courses, this might mean unenrolling
+    // For owned courses, it might delete the course entirely
   };
 
   let displayedCourses = [];
@@ -138,7 +152,7 @@ const CourseSection = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {displayedCourses.map((course, index) => (
           <div
-            key={index}
+            key={course._id}
             className="bg-gray-100 p-6 rounded-lg shadow-md hover:shadow-lg transition"
           >
             {/* Title and 3-dot Menu Container */}
@@ -148,7 +162,10 @@ const CourseSection = () => {
               </h3>
 
               {/* 3-dot Menu Button */}
-              <div className="relative" ref={menuRef}>
+              <div
+                className="relative"
+                ref={(el) => (menuRefs.current[index] = el)}
+              >
                 <button
                   className="text-gray-500 hover:text-gray-700"
                   onClick={() => setMenuOpen(index === menuOpen ? null : index)} // Toggle menu
@@ -160,21 +177,28 @@ const CourseSection = () => {
                 {menuOpen === index && (
                   <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-lg shadow-lg">
                     <ul className="text-left">
+                      {/* Conditionally render the Edit option */}
+                      {course.courseType === "owned" && (
+                        <li
+                          className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
+                          onClick={() => handleEdit(course._id)}
+                        >
+                          Edit
+                        </li>
+                      )}
                       <li
                         className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => handleEdit(course._id)}
-                      >
-                        Edit
-                      </li>
-                      <li
-                        className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => handleArchive(course.id)}
+                        onClick={() =>
+                          handleArchive(course._id, course.courseType)
+                        }
                       >
                         Archive
                       </li>
                       <li
                         className="px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => handleDelete(course.id)}
+                        onClick={() =>
+                          handleDelete(course._id, course.courseType)
+                        }
                       >
                         Delete
                       </li>
