@@ -22,3 +22,31 @@ export const createCourse = async (title, details, courseCode, creator) => {
     throw error;
   }
 };
+
+export const updateCourse = async (courseId,title,details,courseCode) =>{
+  try{
+    await connect();
+    console.log("updating course");
+
+    const course = await Course.findByIdAndUpdate(
+      courseId,
+      {
+        title:title,
+        description:details,
+        courseCode:courseCode
+      },
+      {new: true}
+    );
+
+    if(!course){
+      console.error("Course not found");
+      throw new Error("Course not found");
+    }
+
+    console.log("Course updated:", course);
+    return course.toObject(); 
+  }catch (error) {
+    console.error("Error updating course:", error);
+    throw error;
+  }
+};

@@ -53,6 +53,7 @@ const CourseSection = () => {
   const handleEdit = (id) => {
     // Handle edit logic here
     router.push(`/courses/edit-course/${id}`);
+    console.log(id);
   };
 
   const handleArchive = (id) => {
@@ -80,7 +81,7 @@ const CourseSection = () => {
             <div className="absolute right-0 mt-2 w-36 bg-white border-2 border-gray-200 rounded-lg shadow-lg">
               <ul className="text-left">
                 <li className="w-full rounded-lg px-2 py-2 text-center text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  <Link href="/courses/join-class">Join Course</Link>
+                  <Link href="/courses/join-course">Join Course</Link>
                 </li>
                 <li className="w-full rounded-lg px-2 py-2 text-center text-gray-700 hover:bg-gray-100 cursor-pointer">
                   <Link href="/courses/create-course">Create Course</Link>
@@ -163,7 +164,7 @@ const CourseSection = () => {
                     <ul className="text-left">
                       <li
                         className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
-                        onClick={() => handleEdit(course.id)}
+                        onClick={() => handleEdit(course._id)}
                       >
                         Edit
                       </li>
