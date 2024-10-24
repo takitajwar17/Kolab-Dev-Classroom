@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { LuDices } from "react-icons/lu";
 import { nanoid } from "nanoid";
+import  {updateCourse} from "../../../../lib/actions/course";
+
 
 export default function EditCoursePage({ params }) {
   const { courseId } = params; // Correctly destructure courseId from params
@@ -69,8 +71,12 @@ export default function EditCoursePage({ params }) {
 
     try {
      //business logic
+     const course = await updateCourse(courseId,title,details,courseCode)
+     console.log("Course updated:", course);
+     alert("Course updated successfully!");
     } catch (error) {
       console.error("Error updating course:", error);
+      alert("Error updating course. Please try again.");
     }
   };
 
