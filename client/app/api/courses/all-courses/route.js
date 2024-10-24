@@ -24,6 +24,13 @@ export async function GET() {
       enrolled: enrolledCourses,
     };
 
+    // If the user is not enrolled in any courses, return a suitable message
+    if (courses.enrolled.length === 0) {
+      return NextResponse.json({
+        message: "No courses found where user is enrolled.",
+      });
+    }
+
     // Return the combined course details
     return NextResponse.json(courses);
   } catch (error) {

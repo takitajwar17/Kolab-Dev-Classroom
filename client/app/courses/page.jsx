@@ -42,6 +42,26 @@ const CourseSection = () => {
     fetchCourses();
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Check if the click is outside the 3-dot menu
+      if (menuRefs.current.some((ref) => ref && ref.contains(event.target))) {
+        return; // Clicked inside the menu, do nothing
+      }
+      setMenuOpen(null); // Close the 3-dot menu if clicked outside
+
+      // Check if the click is outside the plus menu
+      if (plusMenuRef.current && !plusMenuRef.current.contains(event.target)) {
+        setPlusMenuOpen(false); // Close the plus menu if clicked outside
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuRefs]);
+
   const handleEdit = (id) => {
     router.push(`/courses/edit-course/${id}`);
   };
