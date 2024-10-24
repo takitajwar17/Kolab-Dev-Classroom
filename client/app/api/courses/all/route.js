@@ -1,4 +1,3 @@
-// route.js
 import Course from "@/lib/models/courseModel";
 import { connect } from "@/lib/mongodb/mongoose";
 import { auth } from "@clerk/nextjs";
@@ -13,22 +12,22 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Fetch courses where the user is enrolled
-    const courses = await Course.find({
-      enrolledStudents: userId,
-    });
+    // Fetch owned courses
+    const ownedCourses = await Course.find({ creator: userId });
 
-    // If the user is not enrolled in any courses, return a suitable message
-    if (courses.length === 0) {
-      return NextResponse.json({
-        message: "No courses found where user is enrolled.",
-      });
-    }
+    // Fetch enrolled courses
+    const enrolledCourses = await Course.find({ enrolledStudents: userId });
 
-    // Return the course details without populating task details
+    // Combine both owned and enrolled courses
+    const courses = {
+      owned: ownedCourses,
+      enrolled: enrolledCourses,
+    };
+
+    // Return the combined course details
     return NextResponse.json(courses);
   } catch (error) {
-    console.error("Error fetching enrolled courses:", error);
+    console.error("Error fetching courses:", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

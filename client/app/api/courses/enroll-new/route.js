@@ -8,7 +8,7 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
   try {
     await connect();
-    const { userId } = auth(); // This should be equivalent to the clerkId
+    const { userId } = auth(); // This retrieves the authenticated user's ID
 
     if (!userId) {
       console.log("Authentication failed: No user ID found");
@@ -23,28 +23,44 @@ export async function POST(request) {
 
     // Check if courseCode is provided
     if (!courseCode) {
-      console.log("Missing fields in the request body", {
-        courseCode,
-      });
+      console.log("Missing field in the request body", { courseCode });
       return NextResponse.json(
         { error: "Course code is required" },
         { status: 400 }
       );
     }
 
-    // Find the course by the given courseCode and add the clerkId to enrolledStudents
-    const updatedCourse = await Course.findOneAndUpdate(
-      { courseCode: courseCode },
-      { $addToSet: { enrolledStudents: userId } }, // Use $addToSet to prevent duplicate entries
-      { new: true }
-    );
+    // Find the course by the given courseCode
+    const course = await Course.findOne({ courseCode: courseCode });
 
-    if (!updatedCourse) {
+    if (!course) {
       console.log("No course found with the provided courseCode", {
         courseCode,
       });
       return NextResponse.json({ error: "Course not found" }, { status: 404 });
     }
+
+    // Check if the user trying to enroll is the creator of the course
+    if (course.creator === userId) {
+      console.log("Creator trying to enroll as student", {
+        userId,
+        courseCode,
+      });
+      return NextResponse.json(
+        {
+          error:
+            "Course creators cannot enroll as students in their own courses",
+        },
+        { status: 403 }
+      );
+    }
+
+    // Enroll the user as a student if they are not the creator
+    const updatedCourse = await Course.findOneAndUpdate(
+      { courseCode: courseCode },
+      { $addToSet: { enrolledStudents: userId } }, // Use $addToSet to prevent duplicate entries
+      { new: true }
+    );
 
     console.log("Student enrolled successfully", {
       courseCode,
