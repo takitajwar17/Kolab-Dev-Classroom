@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { BsPlus, BsThreeDotsVertical } from "react-icons/bs";
+import JoinCourseModal from "./JoinCourseModal";
 
 const CourseSection = () => {
   const router = useRouter();
@@ -14,6 +15,7 @@ const CourseSection = () => {
   const [plusMenuOpen, setPlusMenuOpen] = useState(false);
   const plusMenuRef = useRef(null);
   const [loading, setLoading] = useState(true); // Loading state
+  const [joinModalOpen, setJoinModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -99,6 +101,16 @@ const CourseSection = () => {
     );
   }
 
+  const handleJoinCourse = async (courseCode) => {
+    try {
+      // Add your API call here to join the course
+      console.log("Joining course with code:", courseCode);
+      setJoinModalOpen(false);
+    } catch (error) {
+      console.error("Error joining course:", error);
+    }
+  };
+
   // Loading Screen
   if (loading) {
     return (
@@ -154,7 +166,15 @@ const CourseSection = () => {
             <div className="absolute right-0 mt-2 w-36 bg-white border-2 border-gray-200 rounded-lg shadow-lg">
               <ul className="text-left">
                 <li className="w-full rounded-lg px-2 py-2 text-center text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  <Link href="/courses/join-course">Join Course</Link>
+                  <button
+                    onClick={() => {
+                      setJoinModalOpen(true);
+                      setPlusMenuOpen(false);
+                    }}
+                    className="w-full"
+                  >
+                    Join Course
+                  </button>
                 </li>
                 <li className="w-full rounded-lg px-2 py-2 text-center text-gray-700 hover:bg-gray-100 cursor-pointer">
                   <Link href="/courses/create-course">Create Course</Link>
@@ -279,6 +299,14 @@ const CourseSection = () => {
           </div>
         ))}
       </div>
+      {/* Add this just before the closing div */}
+      <JoinCourseModal
+        isOpen={joinModalOpen}
+        onClose={() => setJoinModalOpen(false)}
+        onJoin={handleJoinCourse}
+        userName="Your Name" // Replace with actual user name
+        userEmail="your.email@example.com" // Replace with actual user email
+      />
     </div>
   );
 };
