@@ -19,7 +19,7 @@ const JoinCourseModal = ({ isOpen, onClose, userEmail, userName, onJoin }) => {
         {/* Modal Content */}
         <div className="p-6">
           {/* Header */}
-          <h2 className="text-xl font-bold mb-4">Join class</h2>
+          <h2 className="text-xl font-bold mb-4">Join course</h2>
 
           {/* User Info Section */}
           <div className="bg-gray-100 rounded-lg p-4 mb-6">
@@ -48,27 +48,27 @@ const JoinCourseModal = ({ isOpen, onClose, userEmail, userName, onJoin }) => {
             <div className="space-y-4">
               <div>
                 <label htmlFor="courseCode" className="block font-medium mb-2">
-                  Class code
+                  Course code
                 </label>
                 <p className="text-sm text-gray-500 mb-2">
-                  Ask your teacher for the class code, then enter it here.
+                  Ask your teacher for the course code, then enter it here.
                 </p>
                 <input
                   id="courseCode"
                   value={courseCode}
                   onChange={(e) => setCourseCode(e.target.value)}
-                  placeholder="Class code"
+                  placeholder="Course code"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange focus:border-transparent"
                 />
               </div>
 
               {/* Instructions */}
               <div className="space-y-2">
-                <p className="font-medium">To sign in with a class code</p>
+                <p className="font-medium">To sign in with a course code</p>
                 <ul className="list-disc pl-5 space-y-1 text-sm text-gray-600">
                   <li>Use an authorized account</li>
                   <li>
-                    Use a class code with 7 letters or numbers, and no spaces
+                    Use a course code with 7 letters or numbers, and no spaces
                     but may include symbols
                   </li>
                 </ul>
