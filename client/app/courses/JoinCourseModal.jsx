@@ -1,14 +1,42 @@
+"use client";
 import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 const JoinCourseModal = ({ isOpen, onClose, onJoin }) => {
   const [courseCode, setCourseCode] = useState("");
   const { user } = useUser();
+  const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onJoin(courseCode);
-    setCourseCode("");
+
+    if (!courseCode) {
+      alert("Please enter a course code");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/join-course", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ courseCode }),
+      });
+
+      if (response.ok) {
+        alert("Joined course successfully!");
+        setCourseCode(""); // Clear the input field
+        router.push("/courses"); // Redirect to courses page
+      } else {
+        const errorData = await response.json();
+        alert(errorData.error || "Failed to join course");
+      }
+    } catch (error) {
+      console.error("Error joining course:", error);
+      alert("Error joining course. Please try again.");
+    }
   };
 
   if (!isOpen) return null;
