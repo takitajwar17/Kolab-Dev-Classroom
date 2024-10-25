@@ -24,10 +24,10 @@ export async function GET() {
       enrolled: enrolledCourses,
     };
 
-    // If the user is not enrolled in any courses, return a suitable message
-    if (courses.enrolled.length === 0) {
+    // If the user has no courses at all, return a suitable message
+    if (ownedCourses.length === 0 && enrolledCourses.length === 0) {
       return NextResponse.json({
-        message: "No courses found where user is enrolled.",
+        message: "No courses found where user is enrolled or owns any.",
       });
     }
 
