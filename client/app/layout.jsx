@@ -6,6 +6,8 @@ import Header from "./components/Header";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import ClientLayout from "./components/ClientLayout";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const kanit = Kanit({
   subsets: ["latin"],
@@ -37,6 +39,7 @@ export default function RootLayout({ children }) {
               </div>
             </main>
           </ClientLayout>
+          <ToastContainer />
           <Analytics />
           <SpeedInsights />
         </body>
