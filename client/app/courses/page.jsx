@@ -304,8 +304,6 @@ const CourseSection = () => {
         isOpen={joinModalOpen}
         onClose={() => setJoinModalOpen(false)}
         onJoin={handleJoinCourse}
-        userName="Your Name" // Replace with actual user name
-        userEmail="your.email@example.com" // Replace with actual user email
       />
     </div>
   );

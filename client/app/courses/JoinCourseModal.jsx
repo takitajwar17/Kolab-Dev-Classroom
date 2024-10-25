@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
 
-const JoinCourseModal = ({ isOpen, onClose, userEmail, userName, onJoin }) => {
+const JoinCourseModal = ({ isOpen, onClose, onJoin }) => {
   const [courseCode, setCourseCode] = useState("");
   const { user } = useUser();
 
