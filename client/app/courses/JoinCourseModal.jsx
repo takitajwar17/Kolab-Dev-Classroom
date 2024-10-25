@@ -1,7 +1,7 @@
 "use client";
-import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "react-toastify";
 
 const JoinCourseModal = ({ isOpen, onClose, onJoin }) => {
@@ -29,7 +29,9 @@ const JoinCourseModal = ({ isOpen, onClose, onJoin }) => {
       if (response.ok) {
         toast.success("Joined course successfully!");
         setCourseCode(""); // Clear the input field
+        onClose(); // Close the modal
         router.push("/courses"); // Redirect to courses page
+        window.location.reload(); // Refresh the page to show the new course
       } else {
         const errorData = await response.json();
         toast.error(errorData.error || "Failed to join course");

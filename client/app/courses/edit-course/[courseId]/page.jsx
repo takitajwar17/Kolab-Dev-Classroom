@@ -1,11 +1,10 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { LuDices } from "react-icons/lu";
 import { nanoid } from "nanoid";
-import  {updateCourse} from "../../../../lib/actions/course";
-
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { LuDices } from "react-icons/lu";
+import { updateCourse } from "../../../../lib/actions/course";
 
 export default function EditCoursePage({ params }) {
   const { courseId } = params; // Correctly destructure courseId from params
@@ -70,10 +69,11 @@ export default function EditCoursePage({ params }) {
     }
 
     try {
-     //business logic
-     const course = await updateCourse(courseId,title,details,courseCode)
-     console.log("Course updated:", course);
-     alert("Course updated successfully!");
+      //business logic
+      const course = await updateCourse(courseId, title, details, courseCode);
+      console.log("Course updated:", course);
+      alert("Course updated successfully!");
+      router.push("/courses"); // Redirect to the courses page
     } catch (error) {
       console.error("Error updating course:", error);
       alert("Error updating course. Please try again.");
@@ -87,9 +87,14 @@ export default function EditCoursePage({ params }) {
   return (
     <div className="bg-white min-h-screen px-12 pt-6 text-gray-800">
       <h1 className="text-4xl font-bold mb-6 text-gray-800">Edit Course</h1>
-      <form onSubmit={handleSubmit} className="bg-gray-50 p-6 rounded-lg shadow-lg">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-gray-50 p-6 rounded-lg shadow-lg"
+      >
         <div className="mb-6">
-          <label className="block text-lg font-semibold text-gray-700">Title</label>
+          <label className="block text-lg font-semibold text-gray-700">
+            Title
+          </label>
           <input
             type="text"
             value={title}
@@ -98,7 +103,9 @@ export default function EditCoursePage({ params }) {
           />
         </div>
         <div className="mb-6">
-          <label className="block text-lg font-semibold text-gray-700">Course Details</label>
+          <label className="block text-lg font-semibold text-gray-700">
+            Course Details
+          </label>
           <textarea
             value={details}
             onChange={(e) => setDetails(e.target.value)}
@@ -107,7 +114,9 @@ export default function EditCoursePage({ params }) {
           ></textarea>
         </div>
         <div className="mb-6">
-          <label className="block text-lg font-semibold text-gray-700">Course Code</label>
+          <label className="block text-lg font-semibold text-gray-700">
+            Course Code
+          </label>
           <div className="flex items-center">
             <input
               type="text"
@@ -115,19 +124,27 @@ export default function EditCoursePage({ params }) {
               onChange={(e) => setCourseCode(e.target.value)}
               className="mt-2 block w-full border border-gray-300 rounded-lg p-3 focus:border-orange"
             />
-            <button type="button" onClick={() => setCourseCode(nanoid(7).toUpperCase())} className="p-2">
+            <button
+              type="button"
+              onClick={() => setCourseCode(nanoid(7).toUpperCase())}
+              className="p-2"
+            >
               <LuDices size={24} color="black" />
             </button>
           </div>
         </div>
         <div className="mb-6">
-          <label className="block text-lg font-semibold text-gray-700">Schedule Slot</label>
+          <label className="block text-lg font-semibold text-gray-700">
+            Schedule Slot
+          </label>
           <div className="mt-2 space-y-4">
             {schedule.map((entry, index) => (
               <div key={index} className="flex space-x-4">
                 <select
                   value={entry.day}
-                  onChange={(e) => handleScheduleChange(index, "day", e.target.value)}
+                  onChange={(e) =>
+                    handleScheduleChange(index, "day", e.target.value)
+                  }
                   className="block w-1/2 border border-gray-300 rounded-lg p-3 focus:border-orange"
                 >
                   <option value="">Select Day</option>
@@ -142,7 +159,9 @@ export default function EditCoursePage({ params }) {
                 <input
                   type="time"
                   value={entry.time}
-                  onChange={(e) => handleScheduleChange(index, "time", e.target.value)}
+                  onChange={(e) =>
+                    handleScheduleChange(index, "time", e.target.value)
+                  }
                   className="block w-1/2 border border-gray-300 rounded-lg p-3 focus:border-orange"
                 />
               </div>
@@ -157,10 +176,16 @@ export default function EditCoursePage({ params }) {
           </div>
         </div>
         <div className="flex space-x-6">
-          <button type="submit" className="bg-orange text-white px-6 py-3 rounded-lg hover:bg-red-600 transition">
+          <button
+            type="submit"
+            className="bg-orange text-white px-6 py-3 rounded-lg hover:bg-red-600 transition"
+          >
             Update
           </button>
-          <button type="button" className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition">
+          <button
+            type="button"
+            className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition"
+          >
             <Link href="/courses">Cancel</Link>
           </button>
         </div>

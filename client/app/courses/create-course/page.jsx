@@ -1,11 +1,12 @@
-"use client";
-import React, { useState } from "react";
-import Link from "next/link";
-import { LuDices } from "react-icons/lu";
-import { nanoid } from "nanoid";
-import { createCourse } from "../../../lib/actions/course";
+"use client"; // Ensure this component is a client component
 import { useAuth } from "@clerk/nextjs"; // Import useAuth to get the authenticated user
+import { nanoid } from "nanoid";
+import Link from "next/link";
+import { useRouter } from "next/navigation"; // Change import to next/navigation
+import React, { useState } from "react";
+import { LuDices } from "react-icons/lu";
 import { toast } from "react-toastify";
+import { createCourse } from "../../../lib/actions/course";
 
 const CreateCoursePage = () => {
   const { userId } = useAuth(); // Get the authenticated user's ID
@@ -13,6 +14,7 @@ const CreateCoursePage = () => {
   const [courseCode, setCourseCode] = useState("");
   const [title, setTitle] = useState("");
   const [details, setDetails] = useState("");
+  const router = useRouter(); // Initialize useRouter
 
   const addScheduleEntry = () => {
     const lastEntry = schedule[schedule.length - 1];
@@ -62,6 +64,7 @@ const CreateCoursePage = () => {
       const course = await createCourse(title, details, courseCode, userId); // Pass creator
       console.log("Course created:", course);
       toast.success("Course created successfully!");
+      router.push("/courses"); // Redirect to /courses on success
     } catch (error) {
       console.error("Error creating course:", error);
       toast.error("Error creating course. Please try again.");
