@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { LuDices } from "react-icons/lu";
 import { nanoid } from "nanoid";
-import { createCourse } from '../../../lib/actions/course';
+import { createCourse } from "../../../lib/actions/course";
 import { useAuth } from "@clerk/nextjs"; // Import useAuth to get the authenticated user
+import { toast } from "react-toastify";
 
 const CreateCoursePage = () => {
   const { userId } = useAuth(); // Get the authenticated user's ID
@@ -18,7 +19,7 @@ const CreateCoursePage = () => {
     if (lastEntry.day && lastEntry.time) {
       setSchedule([...schedule, { day: "", time: "" }]);
     } else {
-      alert("You have an empty slot");
+      toast.error("You have an empty slot");
     }
   };
 
@@ -43,7 +44,7 @@ const CreateCoursePage = () => {
       !courseCode ||
       schedule.some((slot) => !slot.day || !slot.time)
     ) {
-      alert("Please fill in all fields");
+      toast.error("Please fill in all fields");
       return;
     }
 
@@ -60,10 +61,10 @@ const CreateCoursePage = () => {
       // Call the createCourse function to save the data
       const course = await createCourse(title, details, courseCode, userId); // Pass creator
       console.log("Course created:", course);
-      alert("Course created successfully!");
+      toast.success("Course created successfully!");
     } catch (error) {
       console.error("Error creating course:", error);
-      alert("Error creating course. Please try again.");
+      toast.error("Error creating course. Please try again.");
     }
   };
 

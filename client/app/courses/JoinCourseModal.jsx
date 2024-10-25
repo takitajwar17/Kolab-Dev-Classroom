@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const JoinCourseModal = ({ isOpen, onClose, onJoin }) => {
   const [courseCode, setCourseCode] = useState("");
@@ -12,7 +13,7 @@ const JoinCourseModal = ({ isOpen, onClose, onJoin }) => {
     e.preventDefault();
 
     if (!courseCode) {
-      alert("Please enter a course code");
+      toast.error("Please enter a course code");
       return;
     }
 
@@ -26,16 +27,16 @@ const JoinCourseModal = ({ isOpen, onClose, onJoin }) => {
       });
 
       if (response.ok) {
-        alert("Joined course successfully!");
+        toast.success("Joined course successfully!");
         setCourseCode(""); // Clear the input field
         router.push("/courses"); // Redirect to courses page
       } else {
         const errorData = await response.json();
-        alert(errorData.error || "Failed to join course");
+        toast.error(errorData.error || "Failed to join course");
       }
     } catch (error) {
       console.error("Error joining course:", error);
-      alert("Error joining course. Please try again.");
+      toast.error("Error joining Course. Please try again");
     }
   };
 
