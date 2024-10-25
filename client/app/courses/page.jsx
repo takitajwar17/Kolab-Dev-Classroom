@@ -1,11 +1,12 @@
+// CourseSection.js
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import JoinCourseModal from "./JoinCourseModal";
-import Header from "./Header";
-import TabsAndSearch from "./TabsAndSearch";
 import CourseCard from "./CourseCard";
+import Header from "./Header";
+import JoinCourseModal from "./JoinCourseModal";
 import LoadingSkeleton from "./LoadingSkeleton";
+import TabsAndSearch from "./TabsAndSearch";
 
 const CourseSection = () => {
   const router = useRouter();
@@ -73,10 +74,17 @@ const CourseSection = () => {
 
   const handleArchive = (id, courseType) => {
     // Handle archive logic here
+    console.log(`Archiving course with ID: ${id}`);
   };
 
   const handleDelete = (id, courseType) => {
     // Handle delete logic here
+    console.log(`Deleting course with ID: ${id}`);
+  };
+
+  const handleUnenroll = (id, courseType) => {
+    // Placeholder for unenroll logic
+    console.log(`Unenrolling from course with ID: ${id}`);
   };
 
   const handleJoinCourse = async (courseCode) => {
@@ -135,6 +143,7 @@ const CourseSection = () => {
             handleEdit={handleEdit}
             handleArchive={handleArchive}
             handleDelete={handleDelete}
+            handleUnenroll={handleUnenroll} // Pass the unenroll handler
           />
         ))}
       </div>

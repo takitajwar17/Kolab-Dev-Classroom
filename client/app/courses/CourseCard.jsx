@@ -1,3 +1,4 @@
+// CourseCard.js
 import { BsThreeDotsVertical } from "react-icons/bs";
 
 const CourseCard = ({
@@ -9,6 +10,7 @@ const CourseCard = ({
   handleEdit,
   handleArchive,
   handleDelete,
+  handleUnenroll, // Handler for unenroll action
 }) => {
   return (
     <div className="bg-gray-100 p-6 rounded-lg shadow-md hover:shadow-lg transition">
@@ -27,25 +29,41 @@ const CourseCard = ({
             <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-lg shadow-lg">
               <ul className="text-left">
                 {course.courseType === "owned" && (
+                  <>
+                    <li
+                      className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => handleEdit(course._id)}
+                    >
+                      Edit
+                    </li>
+                    <li
+                      className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
+                      onClick={() =>
+                        handleArchive(course._id, course.courseType)
+                      }
+                    >
+                      Archive
+                    </li>
+                    <li
+                      className="px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer"
+                      onClick={() =>
+                        handleDelete(course._id, course.courseType)
+                      }
+                    >
+                      Delete
+                    </li>
+                  </>
+                )}
+                {course.courseType === "enrolled" && (
                   <li
-                    className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
-                    onClick={() => handleEdit(course._id)}
+                    className="px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer"
+                    onClick={() =>
+                      handleUnenroll(course._id, course.courseType)
+                    }
                   >
-                    Edit
+                    Unenroll
                   </li>
                 )}
-                <li
-                  className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => handleArchive(course._id, course.courseType)}
-                >
-                  Archive
-                </li>
-                <li
-                  className="px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer"
-                  onClick={() => handleDelete(course._id, course.courseType)}
-                >
-                  Delete
-                </li>
               </ul>
             </div>
           )}
