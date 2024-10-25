@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
-import { useState } from 'react';
-import { FaGithub, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import { useState } from "react";
+import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 
 const LandingPage = () => {
   const [hoveredFeature, setHoveredFeature] = useState(null);
-  const [selectedRole, setSelectedRole] = useState('Teacher');
+  const [selectedRole, setSelectedRole] = useState("Teacher");
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#323231] to-[#cf4500] text-white w-full overflow-hidden">
@@ -20,7 +20,7 @@ const LandingPage = () => {
               rotate: [0, 5, -5, 0],
             }}
             transition={{ duration: 20, repeat: Infinity }}
-            className="w-full h-full bg-[url('/abstract-bg.png')] opacity-10"
+            className="w-full h-full bg-gradient-to-br from-[#323231] to-[#cf4500] opacity-10"
           />
         </div>
         <div className="z-10 text-center max-w-4xl mx-auto">
@@ -38,7 +38,8 @@ const LandingPage = () => {
             transition={{ delay: 0.4, duration: 0.8 }}
             className="text-lg md:text-xl lg:text-2xl mb-12"
           >
-            Empower teachers and students with real-time collaboration, monitoring, and feedback in a cutting-edge coding environment.
+            Empower teachers and students with real-time collaboration,
+            monitoring, and feedback in a cutting-edge coding environment.
           </motion.p>
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -46,10 +47,16 @@ const LandingPage = () => {
             transition={{ delay: 0.6, duration: 0.5 }}
             className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4"
           >
-            <Link href="/sign-up" className="w-full sm:w-auto bg-[#cf4500] text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-[#ff5500] transition duration-300">
+            <Link
+              href="/sign-up"
+              className="w-full sm:w-auto bg-[#cf4500] text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-[#ff5500] transition duration-300"
+            >
               Get Started
             </Link>
-            <Link href="/demo" className="w-full sm:w-auto bg-transparent border-2 border-white text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-white hover:text-[#323231] transition duration-300">
+            <Link
+              href="/demo"
+              className="w-full sm:w-auto bg-transparent border-2 border-white text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-white hover:text-[#323231] transition duration-300"
+            >
               Schedule Demo
             </Link>
           </motion.div>
@@ -78,7 +85,9 @@ const LandingPage = () => {
               >
                 <div className="flex items-center mb-4">
                   <span className="text-4xl mr-4">{feature.icon}</span>
-                  <h3 className="text-xl font-semibold text-white">{feature.title}</h3>
+                  <h3 className="text-xl font-semibold text-white">
+                    {feature.title}
+                  </h3>
                 </div>
                 <p className="text-gray-100">{feature.description}</p>
               </motion.div>
@@ -105,7 +114,9 @@ const LandingPage = () => {
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
-                className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center`}
+                className={`flex flex-col ${
+                  index % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"
+                } items-center`}
               >
                 <div className="w-full md:w-1/2 mb-8 md:mb-0">
                   <h3 className="text-2xl font-semibold mb-4">{step.title}</h3>
@@ -147,8 +158,8 @@ const LandingPage = () => {
                 onClick={() => setSelectedRole(useCase.role)}
                 className={`w-full sm:w-auto px-6 py-2 rounded-full text-lg font-semibold transition-colors ${
                   selectedRole === useCase.role
-                    ? 'bg-[#cf4500] text-white'
-                    : 'bg-white text-[#cf4500] hover:bg-[#cf4500] hover:text-white'
+                    ? "bg-[#cf4500] text-white"
+                    : "bg-white text-[#cf4500] hover:bg-[#cf4500] hover:text-white"
                 }`}
               >
                 {useCase.role}
@@ -164,22 +175,37 @@ const LandingPage = () => {
               transition={{ duration: 0.5 }}
               className="bg-white rounded-lg shadow-lg p-6"
             >
-              <h3 className="text-2xl font-bold mb-4 text-[#cf4500]">{selectedRole} Features</h3>
+              <h3 className="text-2xl font-bold mb-4 text-[#cf4500]">
+                {selectedRole} Features
+              </h3>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {useCases.find(uc => uc.role === selectedRole).actions.map((action, index) => (
-                  <motion.li
-                    key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="flex items-center space-x-2"
-                  >
-                    <svg className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    <span>{action}</span>
-                  </motion.li>
-                ))}
+                {useCases
+                  .find((uc) => uc.role === selectedRole)
+                  .actions.map((action, index) => (
+                    <motion.li
+                      key={index}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="flex items-center space-x-2"
+                    >
+                      <svg
+                        className="w-6 h-6 text-green-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M5 13l4 4L19 7"
+                        ></path>
+                      </svg>
+                      <span>{action}</span>
+                    </motion.li>
+                  ))}
               </ul>
             </motion.div>
           </AnimatePresence>
@@ -194,13 +220,24 @@ const LandingPage = () => {
         className="py-20 px-4 bg-[#cf4500] text-white text-center"
       >
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">Transform Your Coding Education Today</h2>
-          <p className="text-xl mb-12">Join the future of collaborative learning and elevate your teaching experience.</p>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+            Transform Your Coding Education Today
+          </h2>
+          <p className="text-xl mb-12">
+            Join the future of collaborative learning and elevate your teaching
+            experience.
+          </p>
           <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
-            <Link href="/sign-up" className="w-full sm:w-auto bg-[#cf4500] text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-[#ff5500] transition duration-300">
+            <Link
+              href="/sign-up"
+              className="w-full sm:w-auto bg-[#cf4500] text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-[#ff5500] transition duration-300"
+            >
               Get Started
             </Link>
-            <Link href="/demo" className="w-full sm:w-auto bg-transparent border-2 border-white text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-white hover:text-[#323231] transition duration-300">
+            <Link
+              href="/demo"
+              className="w-full sm:w-auto bg-transparent border-2 border-white text-white py-3 px-8 rounded-full text-lg font-semibold hover:bg-white hover:text-[#323231] transition duration-300"
+            >
               Schedule Demo
             </Link>
           </div>
@@ -212,34 +249,93 @@ const LandingPage = () => {
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-xl font-semibold mb-4">Kolab</h3>
-            <p className="text-sm">Empowering collaborative coding for the future of education.</p>
+            <p className="text-sm">
+              Empowering collaborative coding for the future of education.
+            </p>
           </div>
           <div>
             <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              <li><Link href="/about" className="hover:text-[#cf4500] transition-colors">About</Link></li>
-              <li><Link href="/features" className="hover:text-[#cf4500] transition-colors">Features</Link></li>
-              <li><Link href="/pricing" className="hover:text-[#cf4500] transition-colors">Pricing</Link></li>
-              <li><Link href="/contact" className="hover:text-[#cf4500] transition-colors">Contact</Link></li>
+              <li>
+                <Link
+                  href="/about"
+                  className="hover:text-[#cf4500] transition-colors"
+                >
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/features"
+                  className="hover:text-[#cf4500] transition-colors"
+                >
+                  Features
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/pricing"
+                  className="hover:text-[#cf4500] transition-colors"
+                >
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/contact"
+                  className="hover:text-[#cf4500] transition-colors"
+                >
+                  Contact
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
             <h4 className="text-lg font-semibold mb-4">Legal</h4>
             <ul className="space-y-2">
-              <li><Link href="/privacy" className="hover:text-[#cf4500] transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="hover:text-[#cf4500] transition-colors">Terms of Service</Link></li>
+              <li>
+                <Link
+                  href="/privacy"
+                  className="hover:text-[#cf4500] transition-colors"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/terms"
+                  className="hover:text-[#cf4500] transition-colors"
+                >
+                  Terms of Service
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
             <h4 className="text-lg font-semibold mb-4">Connect</h4>
             <div className="flex space-x-4">
-              <a href="https://github.com/kolab" target="_blank" rel="noopener noreferrer" className="hover:text-[#cf4500] transition-colors">
+              <a
+                href="https://github.com/kolab"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[#cf4500] transition-colors"
+              >
                 <FaGithub size={24} />
               </a>
-              <a href="https://twitter.com/kolab" target="_blank" rel="noopener noreferrer" className="hover:text-[#cf4500] transition-colors">
+              <a
+                href="https://twitter.com/kolab"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[#cf4500] transition-colors"
+              >
                 <FaTwitter size={24} />
               </a>
-              <a href="https://linkedin.com/company/kolab" target="_blank" rel="noopener noreferrer" className="hover:text-[#cf4500] transition-colors">
+              <a
+                href="https://linkedin.com/company/kolab"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[#cf4500] transition-colors"
+              >
                 <FaLinkedin size={24} />
               </a>
             </div>
@@ -254,35 +350,67 @@ const LandingPage = () => {
 };
 
 const features = [
-  { title: "Real-Time Collaboration", description: "Code together, learn together with instant pair programming and project rooms.", icon: "👥" },
-  { title: "Live Monitoring", description: "Track student progress in real-time and provide immediate guidance.", icon: "🔍" },
-  { title: "Integrated IDE", description: "Write, test, and debug code seamlessly within our powerful built-in environment.", icon: "💻" },
-  { title: "Smart Task Management", description: "Create, assign, and track coding tasks with ease.", icon: "📝" },
-  { title: "Instant Feedback", description: "Provide in-line comments and grades to accelerate learning.", icon: "💬" },
-  { title: "Academic Integrity", description: "Ensure originality with our advanced plagiarism detection. (Coming Soon)", icon: "🔒" },
+  {
+    title: "Real-Time Collaboration",
+    description:
+      "Code together, learn together with instant pair programming and project rooms.",
+    icon: "👥",
+  },
+  {
+    title: "Live Monitoring",
+    description:
+      "Track student progress in real-time and provide immediate guidance.",
+    icon: "🔍",
+  },
+  {
+    title: "Integrated IDE",
+    description:
+      "Write, test, and debug code seamlessly within our powerful built-in environment.",
+    icon: "💻",
+  },
+  {
+    title: "Smart Task Management",
+    description: "Create, assign, and track coding tasks with ease.",
+    icon: "📝",
+  },
+  {
+    title: "Instant Feedback",
+    description: "Provide in-line comments and grades to accelerate learning.",
+    icon: "💬",
+  },
+  {
+    title: "Academic Integrity",
+    description:
+      "Ensure originality with our advanced plagiarism detection. (Coming Soon)",
+    icon: "🔒",
+  },
 ];
 
 const steps = [
   {
     title: "Create Virtual Classrooms",
-    description: "Set up your coding environment and invite students with just a few clicks.",
-    svgSrc: "/class-svgrepo-com.svg"
+    description:
+      "Set up your coding environment and invite students with just a few clicks.",
+    svgSrc: "/class-svgrepo-com.svg",
   },
   {
     title: "Collaborate in Real-Time",
-    description: "Engage in live coding sessions, pair programming, and interactive discussions.",
-    svgSrc: "/collaborate-svgrepo-com.svg"
+    description:
+      "Engage in live coding sessions, pair programming, and interactive discussions.",
+    svgSrc: "/collaborate-svgrepo-com.svg",
   },
   {
     title: "Monitor and Guide",
-    description: "View student progress in real-time and provide instant feedback when needed.",
-    svgSrc: "/monitor-alt-1-svgrepo-com.svg" 
+    description:
+      "View student progress in real-time and provide instant feedback when needed.",
+    svgSrc: "/monitor-alt-1-svgrepo-com.svg",
   },
   {
     title: "Evaluate and Improve",
-    description: "Review submitted code, provide detailed feedback, and track student growth over time.",
-    svgSrc: "/review-screen-svgrepo-com.svg"
-  }
+    description:
+      "Review submitted code, provide detailed feedback, and track student growth over time.",
+    svgSrc: "/review-screen-svgrepo-com.svg",
+  },
 ];
 
 const useCases = [
@@ -298,7 +426,7 @@ const useCases = [
       "Assign grades",
       "Manage project deadlines",
       "Create virtual classrooms",
-    ]
+    ],
   },
   {
     role: "Student",
@@ -310,7 +438,7 @@ const useCases = [
       "Track progress on assignments",
       "Receive real-time feedback",
       "Join virtual classrooms",
-    ]
+    ],
   },
   {
     role: "Collaborator",
@@ -320,7 +448,7 @@ const useCases = [
       "Contribute to group tasks",
       "Engage in code discussions",
       "Join virtual classrooms",
-    ]
+    ],
   },
 ];
 

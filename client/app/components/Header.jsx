@@ -1,6 +1,6 @@
+import { UserButton, auth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import { UserButton, auth } from "@clerk/nextjs";
 
 // Import the logo image
 import KolabLogo from "../../public/kolab-logo-white-w-icon.png";
@@ -35,7 +35,7 @@ const Header = async ({ username }) => {
         {userId && (
           <Link
             href="dashboard"
-            className="text-gray-300 hover:text-white mr-4"
+            className="text-gray-300 hover:text-white mr-4 border border-gray-600 rounded px-2 py-1 transition duration-300"
           >
             Dashboard
           </Link>
