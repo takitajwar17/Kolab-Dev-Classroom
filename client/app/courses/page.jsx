@@ -1,9 +1,11 @@
 "use client";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { BsPlus, BsThreeDotsVertical } from "react-icons/bs";
 import JoinCourseModal from "./JoinCourseModal";
+import Header from "./Header";
+import TabsAndSearch from "./TabsAndSearch";
+import CourseCard from "./CourseCard";
+import LoadingSkeleton from "./LoadingSkeleton";
 
 const CourseSection = () => {
   const router = useRouter();
@@ -14,17 +16,16 @@ const CourseSection = () => {
   const menuRefs = useRef([]);
   const [plusMenuOpen, setPlusMenuOpen] = useState(false);
   const plusMenuRef = useRef(null);
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
   const [joinModalOpen, setJoinModalOpen] = useState(false);
 
+  // Fetch courses effect
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const response = await fetch("/api/courses/all-courses");
         if (response.ok) {
           const data = await response.json();
-
-          // Add a 'courseType' property to each course
           const ownedCourses = data.owned.map((course) => ({
             ...course,
             courseType: "owned",
@@ -40,24 +41,23 @@ const CourseSection = () => {
       } catch (error) {
         console.error("Error fetching courses:", error);
       } finally {
-        setLoading(false); // Set loading to false after fetching
+        setLoading(false);
       }
     };
 
     fetchCourses();
   }, []);
 
+  // Click outside effect
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Check if the click is outside the 3-dot menu
       if (menuRefs.current.some((ref) => ref && ref.contains(event.target))) {
-        return; // Clicked inside the menu, do nothing
+        return;
       }
-      setMenuOpen(null); // Close the 3-dot menu if clicked outside
+      setMenuOpen(null);
 
-      // Check if the click is outside the plus menu
       if (plusMenuRef.current && !plusMenuRef.current.contains(event.target)) {
-        setPlusMenuOpen(false); // Close the plus menu if clicked outside
+        setPlusMenuOpen(false);
       }
     };
 
@@ -73,18 +73,22 @@ const CourseSection = () => {
 
   const handleArchive = (id, courseType) => {
     // Handle archive logic here
-    // For enrolled courses, this might mean archiving it from the user's view
-    // For owned courses, it might archive the course entirely
   };
 
   const handleDelete = (id, courseType) => {
     // Handle delete logic here
-    // For enrolled courses, this might mean unenrolling
-    // For owned courses, it might delete the course entirely
+  };
+
+  const handleJoinCourse = async (courseCode) => {
+    try {
+      console.log("Joining course with code:", courseCode);
+      setJoinModalOpen(false);
+    } catch (error) {
+      console.error("Error joining course:", error);
+    }
   };
 
   let displayedCourses = [];
-
   if (activeTab === "All") {
     displayedCourses = [...courses.owned, ...courses.enrolled];
   } else if (activeTab === "Owned") {
@@ -101,205 +105,39 @@ const CourseSection = () => {
     );
   }
 
-  const handleJoinCourse = async (courseCode) => {
-    try {
-      // Add your API call here to join the course
-      console.log("Joining course with code:", courseCode);
-      setJoinModalOpen(false);
-    } catch (error) {
-      console.error("Error joining course:", error);
-    }
-  };
-
-  // Loading Screen
   if (loading) {
-    return (
-      <div className="bg-white min-h-screen px-12 pt-4 text-gray-800">
-        {/* Title and Horizontal Rule */}
-        <div className="flex justify-between items-center">
-          <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-          <div className="h-8 bg-gray-200 rounded w-8"></div>
-        </div>
-        <hr className="mb-4" />
-        {/* Tabs and Search Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          {/* Tabs */}
-          <div className="flex flex-wrap gap-3">
-            {tabs.map((tab, index) => (
-              <div
-                key={index}
-                className="h-10 bg-gray-200 rounded-lg w-20"
-              ></div>
-            ))}
-          </div>
-          {/* Search Bar */}
-          <div className="h-10 bg-gray-200 rounded-lg w-full max-w-2xl"></div>
-        </div>
-        {/* Cards Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(6)].map((_, index) => (
-            <div key={index} className="bg-gray-100 p-6 rounded-lg shadow-md">
-              <div className="h-6 bg-gray-200 rounded w-2/3 mb-4"></div>
-              <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded w-5/6 mb-4"></div>
-              <div className="h-10 bg-gray-200 rounded w-32"></div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
+    return <LoadingSkeleton tabs={tabs} />;
   }
 
   return (
     <div className="bg-white min-h-screen px-12 pt-4 text-gray-800">
-      {/* Title and Horizontal Rule */}
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold mb-2">Courses</h1>
-        <div className="relative" ref={plusMenuRef}>
-          <button
-            className="text-orange hover:bg-orange-700 font-bold text-4xl p-2 rounded-full"
-            onClick={() => setPlusMenuOpen(!plusMenuOpen)}
-          >
-            <BsPlus size={36} />
-          </button>
-          {plusMenuOpen && (
-            <div className="absolute right-0 mt-2 w-36 bg-white border-2 border-gray-200 rounded-lg shadow-lg">
-              <ul className="text-left">
-                <li className="w-full rounded-lg px-2 py-2 text-center text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  <button
-                    onClick={() => {
-                      setJoinModalOpen(true);
-                      setPlusMenuOpen(false);
-                    }}
-                    className="w-full"
-                  >
-                    Join Course
-                  </button>
-                </li>
-                <li className="w-full rounded-lg px-2 py-2 text-center text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  <Link href="/courses/create-course">Create Course</Link>
-                </li>
-              </ul>
-            </div>
-          )}
-        </div>
-      </div>
+      <Header
+        plusMenuOpen={plusMenuOpen}
+        setPlusMenuOpen={setPlusMenuOpen}
+        plusMenuRef={plusMenuRef}
+        setJoinModalOpen={setJoinModalOpen}
+      />
       <hr className="mb-4" />
-      {/* Tabs and Search Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        {/* Tabs */}
-        <div className="flex flex-wrap gap-3">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              className={`py-2 px-4 rounded-lg ${
-                activeTab === tab
-                  ? "bg-orange text-white"
-                  : "bg-gray-100 text-gray-600"
-              } hover:bg-red-100`}
-              onClick={() => setActiveTab(tab)}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-        {/* Search Bar */}
-        <div className="flex items-center ml-auto bg-gray-100 p-2 rounded-lg w-full max-w-2xl max-h-10">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="bg-transparent outline-none text-gray-700 w-full py-0.25 px-2"
-          />
-          <button className="text-gray-500 hover:text-gray-700">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              className="w-4 h-4"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-4.35-4.35M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14z"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      {/* Cards Section */}
+      <TabsAndSearch
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        tabs={tabs}
+      />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {displayedCourses.map((course, index) => (
-          <div
+          <CourseCard
             key={course._id}
-            className="bg-gray-100 p-6 rounded-lg shadow-md hover:shadow-lg transition"
-          >
-            {/* Title and 3-dot Menu Container */}
-            <div className="flex justify-between items-start mb-4">
-              <h3 className="text-lg font-semibold text-gray-700 flex-1">
-                {course.title}
-              </h3>
-
-              {/* 3-dot Menu Button */}
-              <div
-                className="relative"
-                ref={(el) => (menuRefs.current[index] = el)}
-              >
-                <button
-                  className="text-gray-500 hover:text-gray-700"
-                  onClick={() => setMenuOpen(index === menuOpen ? null : index)} // Toggle menu
-                >
-                  <BsThreeDotsVertical />
-                </button>
-
-                {/* Dropdown Menu */}
-                {menuOpen === index && (
-                  <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-lg shadow-lg">
-                    <ul className="text-left">
-                      {/* Conditionally render the Edit option */}
-                      {course.courseType === "owned" && (
-                        <li
-                          className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
-                          onClick={() => handleEdit(course._id)}
-                        >
-                          Edit
-                        </li>
-                      )}
-                      <li
-                        className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
-                        onClick={() =>
-                          handleArchive(course._id, course.courseType)
-                        }
-                      >
-                        Archive
-                      </li>
-                      <li
-                        className="px-4 py-2 text-red-600 hover:bg-gray-100 cursor-pointer"
-                        onClick={() =>
-                          handleDelete(course._id, course.courseType)
-                        }
-                      >
-                        Delete
-                      </li>
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Card Description */}
-            <p className="text-gray-500 mb-4">{course.description}</p>
-
-            {/* View Course Button */}
-            <button className="bg-orange hover:bg-opacity-80 text-white py-2 px-4 rounded-lg">
-              View Course
-            </button>
-          </div>
+            course={course}
+            index={index}
+            menuOpen={menuOpen}
+            setMenuOpen={setMenuOpen}
+            menuRef={(el) => (menuRefs.current[index] = el)}
+            handleEdit={handleEdit}
+            handleArchive={handleArchive}
+            handleDelete={handleDelete}
+          />
         ))}
       </div>
-      {/* Add this just before the closing div */}
       <JoinCourseModal
         isOpen={joinModalOpen}
         onClose={() => setJoinModalOpen(false)}
