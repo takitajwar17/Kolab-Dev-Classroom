@@ -25,7 +25,7 @@ const Header = async ({ username }) => {
               Login
             </Link>
             <Link
-              href="sign-up"
+              href="sign-up?redirect=/dashboard"
               className="bg-[#cf4500] text-white py-2 px-4 rounded hover:bg-[#323231] transition duration-300"
             >
               Sign up
