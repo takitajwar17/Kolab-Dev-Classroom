@@ -1,5 +1,6 @@
 // CourseCard.js
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { useRouter } from "next/navigation";
 
 const CourseCard = ({
   course,
@@ -12,6 +13,12 @@ const CourseCard = ({
   handleDelete,
   handleUnenroll, // Handler for unenroll action
 }) => {
+  const router = useRouter();
+
+  const handleViewCourse = () => {
+    router.push(`/courses/${course._id}`);
+  };
+
   return (
     <div className="bg-gray-100 p-6 rounded-lg shadow-md hover:shadow-lg transition">
       <div className="flex justify-between items-start mb-4">
@@ -70,7 +77,10 @@ const CourseCard = ({
         </div>
       </div>
       <p className="text-gray-500 mb-4">{course.description}</p>
-      <button className="bg-orange hover:bg-opacity-80 text-white py-2 px-4 rounded-lg">
+      <button 
+        onClick={handleViewCourse}
+        className="bg-orange hover:bg-opacity-80 text-white py-2 px-4 rounded-lg"
+      >
         View Course
       </button>
     </div>
