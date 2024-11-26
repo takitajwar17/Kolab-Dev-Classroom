@@ -26,9 +26,9 @@ export async function GET(req, { params }) {
       return NextResponse.json({ error: "Course not found" }, { status: 404 });
     }
 
-    // Check if user has access to this course (creator or enrolled student)
+    // Check if user has access to this course (admin or enrolled student)
     const hasAccess = 
-      course.creator === userId || 
+      course.admin.includes(userId) || 
       course.enrolledStudents.includes(userId);
 
     if (!hasAccess) {

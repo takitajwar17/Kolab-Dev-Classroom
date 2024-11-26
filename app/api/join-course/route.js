@@ -39,22 +39,22 @@ export async function POST(request) {
       return NextResponse.json({ error: "Course not found" }, { status: 404 });
     }
 
-    // Check if the user trying to enroll is the creator of the course
-    if (course.creator === userId) {
-      console.log("Creator trying to enroll as student", {
+    // Check if the user trying to enroll is already an admin of the course
+    if (course.admin.includes(userId)) {
+      console.log("Admin trying to enroll as student", {
         userId,
         courseCode,
       });
       return NextResponse.json(
         {
           error:
-            "Course creators cannot enroll as students in their own courses",
+            "Course administrators cannot enroll as students in their own courses",
         },
         { status: 403 }
       );
     }
 
-    // Enroll the user as a student if they are not the creator
+    // Enroll the user as a student if they are not an admin
     const updatedCourse = await Course.findOneAndUpdate(
       { courseCode: courseCode },
       { $addToSet: { enrolledStudents: userId } }, // Use $addToSet to prevent duplicate entries

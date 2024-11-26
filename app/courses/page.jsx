@@ -14,8 +14,8 @@ import Link from "next/link";
 const CourseSection = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("All");
-  const tabs = ["All", "Latest", "Owned", "Enrolled", "Archived"];
-  const [courses, setCourses] = useState({ owned: [], enrolled: [] });
+  const tabs = ["All", "Latest", "Admin", "Enrolled", "Archived"];
+  const [courses, setCourses] = useState({ admin: [], enrolled: [] });
   const [menuOpen, setMenuOpen] = useState(null);
   const menuRefs = useRef([]);
   const [plusMenuOpen, setPlusMenuOpen] = useState(false);
@@ -24,6 +24,7 @@ const CourseSection = () => {
   const [joinModalOpen, setJoinModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
+
   // Fetch courses effect
   useEffect(() => {
     const fetchCourses = async () => {
@@ -31,15 +32,15 @@ const CourseSection = () => {
         const response = await fetch("/api/courses/all-courses");
         if (response.ok) {
           const data = await response.json();
-          const ownedCourses = data.owned.map((course) => ({
+          const adminCourses = data.admin.map((course) => ({
             ...course,
-            courseType: "owned",
+            courseType: "admin",
           }));
           const enrolledCourses = data.enrolled.map((course) => ({
             ...course,
             courseType: "enrolled",
           }));
-          setCourses({ owned: ownedCourses, enrolled: enrolledCourses });
+          setCourses({ admin: adminCourses, enrolled: enrolledCourses });
         } else {
           console.error("Failed to fetch courses");
         }
@@ -110,17 +111,17 @@ const CourseSection = () => {
 
   let displayedCourses = [];
   if (activeTab === "All") {
-    displayedCourses = [...courses.owned, ...courses.enrolled];
-  } else if (activeTab === "Owned") {
-    displayedCourses = courses.owned;
+    displayedCourses = [...courses.admin, ...courses.enrolled];
+  } else if (activeTab === "Admin") {
+    displayedCourses = courses.admin;
   } else if (activeTab === "Enrolled") {
     displayedCourses = courses.enrolled;
   } else if (activeTab === "Latest") {
-    displayedCourses = [...courses.owned, ...courses.enrolled].sort(
+    displayedCourses = [...courses.admin, ...courses.enrolled].sort(
       (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
     );
   } else if (activeTab === "Archived") {
-    displayedCourses = [...courses.owned, ...courses.enrolled].filter(
+    displayedCourses = [...courses.admin, ...courses.enrolled].filter(
       (course) => course.archived
     );
   }
@@ -245,7 +246,7 @@ const CourseSection = () => {
                       </button>
                       {menuOpen === index && (
                         <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-                          {course.courseType === "owned" ? (
+                          {course.courseType === "admin" ? (
                             <>
                               <button
                                 onClick={(e) => {
@@ -300,7 +301,7 @@ const CourseSection = () => {
                   </p>
                   <div className="flex justify-between items-center">
                     <span className="text-xs text-gray-500">
-                      {course.courseType === "owned" ? "Teaching" : "Enrolled"}
+                      {course.courseType === "admin" ? "Teaching" : "Enrolled"}
                     </span>
                     <span className="text-xs text-gray-500">
                       {course.enrolledStudents?.length || 0} students
