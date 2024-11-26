@@ -108,6 +108,7 @@ export default function CoursePage({ params }) {
                   courseUsers={courseUsers} 
                   isAdmin={course.admin.includes(userId)}
                   courseId={params.courseId}
+                  userId={userId}
                 />
               )}
             </div>
