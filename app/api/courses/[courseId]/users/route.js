@@ -42,12 +42,12 @@ export async function GET(req, { params }) {
     // Fetch admin users
     const adminUsers = await User.find({ 
       clerkId: { $in: course.admin }
-    }).select('firstName lastName image_url email userName');
+    }).select('firstName lastName image_url email userName clerkId');
 
     // Fetch enrolled student users
     const enrolledStudentUsers = await User.find({ 
       clerkId: { $in: course.enrolledStudents }
-    }).select('firstName lastName image_url email userName');
+    }).select('firstName lastName image_url email userName clerkId');
 
     return NextResponse.json({
       admin: adminUsers,

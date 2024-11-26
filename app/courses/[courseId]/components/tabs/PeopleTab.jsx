@@ -1,9 +1,39 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 
-const PeopleTab = ({ courseUsers }) => {
+const PeopleTab = ({ courseUsers, isAdmin, courseId }) => {
+  const [isPromoting, setIsPromoting] = useState(false);
+
+  const promoteToAdmin = async (studentId) => {
+    try {
+      setIsPromoting(true);
+      console.log('Promoting student with ID:', studentId);
+      const response = await fetch(`/api/courses/${courseId}/promote-admin`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ studentId }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        console.error('Error response:', error);
+        throw new Error(error.error || 'Failed to promote student');
+      }
+
+      // Refresh the page to show updated roles
+      window.location.reload();
+    } catch (error) {
+      console.error('Error promoting student:', error);
+      alert(error.message || 'Failed to promote student to admin');
+    } finally {
+      setIsPromoting(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Teachers/Admin Section */}
@@ -34,19 +64,30 @@ const PeopleTab = ({ courseUsers }) => {
         <h2 className="text-xl font-semibold mb-4">Students ({courseUsers?.enrolledStudents?.length || 0})</h2>
         <div className="space-y-4">
           {courseUsers?.enrolledStudents?.map((student) => (
-            <div key={student._id} className="flex items-center space-x-4">
-              <div className="relative w-10 h-10">
-                <Image
-                  src={student.image_url || "/default-avatar.png"}
-                  alt={`${student.firstName} ${student.lastName}`}
-                  fill
-                  className="rounded-full object-cover"
-                />
+            <div key={student._id} className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="relative w-10 h-10">
+                  <Image
+                    src={student.image_url || "/default-avatar.png"}
+                    alt={`${student.firstName} ${student.lastName}`}
+                    fill
+                    className="rounded-full object-cover"
+                  />
+                </div>
+                <div>
+                  <p className="font-medium">{`${student.firstName} ${student.lastName}`}</p>
+                  <p className="text-sm text-gray-600">{student.email}</p>
+                </div>
               </div>
-              <div>
-                <p className="font-medium">{`${student.firstName} ${student.lastName}`}</p>
-                <p className="text-sm text-gray-600">{student.email}</p>
-              </div>
+              {isAdmin && (
+                <button
+                  onClick={() => promoteToAdmin(student.clerkId)}
+                  disabled={isPromoting}
+                  className="px-4 py-2 text-sm bg-orange text-white rounded-lg hover:bg-opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isPromoting ? 'Promoting...' : 'Make Admin'}
+                </button>
+              )}
             </div>
           ))}
           {(!courseUsers?.enrolledStudents || courseUsers.enrolledStudents.length === 0) && (

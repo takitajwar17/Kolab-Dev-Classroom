@@ -103,7 +103,13 @@ export default function CoursePage({ params }) {
             <div className="lg:col-span-2 space-y-4">
               {activeTab === "stream" && <StreamTab course={course} />}
               {activeTab === "classwork" && <ClassworkTab />}
-              {activeTab === "people" && <PeopleTab courseUsers={courseUsers} />}
+              {activeTab === "people" && (
+                <PeopleTab 
+                  courseUsers={courseUsers} 
+                  isAdmin={course.admin.includes(userId)}
+                  courseId={params.courseId}
+                />
+              )}
             </div>
           </div>
         </div>
