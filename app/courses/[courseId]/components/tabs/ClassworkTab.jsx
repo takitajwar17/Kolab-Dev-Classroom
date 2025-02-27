@@ -14,15 +14,17 @@ import { useParams } from 'next/navigation';
 
 const ClassworkTab = ({ tasks: initialTasks }) => {
   const { session } = useSession();
+  const params = useParams();
+  const courseId = params.courseId;
+
   const [isCreateTaskModalOpen, setIsCreateTaskModalOpen] = useState(false);
   const [taskFilter, setTaskFilter] = useState('all');
   const [taskSort, setTaskSort] = useState('newest');
   const [tasks, setTasks] = useState(initialTasks || []);
   const [isLoading, setIsLoading] = useState(false);
   
-
-  const params = useParams();
-  const courseId = params.courseId;
+  // State to track if current user is an admin
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const [newTask, setNewTask] = useState({
     title: '',
@@ -32,12 +34,38 @@ const ClassworkTab = ({ tasks: initialTasks }) => {
     type: 'assignment'
   });
 
-  // Debug: Log courseId when component mounts
+  // Fetch course details to check admin status
   useEffect(() => {
-    console.log('ClassworkTab mounted with courseId:', courseId);
-  }, [courseId]);
+    const fetchCourseDetails = async () => {
+      try {
+        const response = await fetch(`/api/courses/${courseId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch course details');
+        }
+        const courseData = await response.json();
+        
+        // Check if current user is in the admin array
+        const userIsAdmin = courseData.admin && courseData.admin.includes(session?.user.id);
+        
+        setIsAdmin(userIsAdmin);
+      } catch (error) {
+        console.error('Error fetching course details:', error);
+        setIsAdmin(false);
+      }
+    };
+
+    if (courseId && session?.user) {
+      fetchCourseDetails();
+    }
+  }, [courseId, session?.user]);
 
   const handleCreateTask = async () => {
+    // Validate user is admin
+    if (!isAdmin) {
+      alert('You do not have permission to create tasks');
+      return;
+    }
+
     // Validate input
     if (!newTask.title || !newTask.description) {
       alert('Please fill in all required fields');
@@ -64,25 +92,10 @@ const ClassworkTab = ({ tasks: initialTasks }) => {
       formData.append('courseId', courseId);
       formData.append('createdBy', session?.user?.id || '');
 
-      // Debug log
-      console.log('Attempting to create task with courseId:', courseId);
-      console.log('Form data:', {
-        title: newTask.title,
-        description: newTask.description,
-        type: newTask.type,
-        points: newTask.points,
-        dueDate: newTask.dueDate,
-        courseId: courseId,
-        createdBy: session?.user?.id
-      });
-
       // Call server action to create task
       const result = await createTask(formData);
 
       if (result.success) {
-        // Log successful task creation
-        console.log('Task created successfully:', result.task);
-
         // Immediately update local state to reflect new task
         setTasks(prevTasks => [result.task, ...prevTasks]);
 
@@ -96,7 +109,7 @@ const ClassworkTab = ({ tasks: initialTasks }) => {
           type: 'assignment'
         });
       } else {
-        // Handle error (e.g., show error message)
+        // Handle error
         console.error('Task creation failed:', result.error);
         alert(`Failed to create task: ${result.error}`);
       }
@@ -108,6 +121,7 @@ const ClassworkTab = ({ tasks: initialTasks }) => {
     }
   };
 
+  // Filtering and sorting logic
   const filteredTasks = tasks?.filter(task => {
     if (taskFilter === 'all') return true;
     return task.type === taskFilter;
@@ -122,92 +136,111 @@ const ClassworkTab = ({ tasks: initialTasks }) => {
     <div className="bg-white rounded-lg shadow-sm p-6 space-y-4">
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">Classwork</h2>
-        <Dialog open={isCreateTaskModalOpen} onOpenChange={setIsCreateTaskModalOpen}>
-          <DialogTrigger asChild>
-            <Button variant="outline" size="sm">
-              <Plus className="mr-2 h-4 w-4" /> Create Task
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Create New Task</DialogTitle>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="title" className="text-right">Title</Label>
-                <Input 
-                  id="title" 
-                  value={newTask.title}
-                  onChange={(e) => setNewTask({...newTask, title: e.target.value})}
-                  className="col-span-3" 
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="description" className="text-right">Description</Label>
-                <Textarea 
-                  id="description" 
-                  value={newTask.description}
-                  onChange={(e) => setNewTask({...newTask, description: e.target.value})}
-                  className="col-span-3" 
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="type" className="text-right">Type</Label>
-                <Select 
-                  value={newTask.type}
-                  onValueChange={(value) => setNewTask({...newTask, type: value})}
-                >
-                  <SelectTrigger className="col-span-3">
-                    <SelectValue placeholder="Select task type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="assignment">Assignment</SelectItem>
-                    <SelectItem value="quiz">Quiz</SelectItem>
-                    <SelectItem value="project">Project</SelectItem>
-                    <SelectItem value="lab">Lab Task</SelectItem>
-                    <SelectItem value="material">Study Material</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="points" className="text-right">Points</Label>
-                <Input 
-                  id="points" 
-                  type="number"
-                  value={newTask.points}
-                  onChange={(e) => setNewTask({...newTask, points: Number(e.target.value)})}
-                  className="col-span-3" 
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="dueDate" className="text-right">Due Date</Label>
-                <Input 
-                  id="dueDate" 
-                  type="date"
-                  value={newTask.dueDate}
-                  onChange={(e) => setNewTask({...newTask, dueDate: e.target.value})}
-                  className="col-span-3" 
-                />
-              </div>
-              {/* Debug: Show courseId in the form */}
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Course ID</Label>
-                <div className="col-span-3 text-sm text-gray-600">
-                  {courseId || 'Not available'}
+        
+        {/* Conditionally render create task button for admins */}
+        {isAdmin && (
+          <Dialog open={isCreateTaskModalOpen} onOpenChange={setIsCreateTaskModalOpen}>
+            <DialogTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Plus className="mr-2 h-4 w-4" /> Create Task
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Create New Task</DialogTitle>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="title" className="text-right">
+                    Title
+                  </Label>
+                  <Input 
+                    id="title"
+                    value={newTask.title}
+                    onChange={(e) => setNewTask({...newTask, title: e.target.value})}
+                    className="col-span-3" 
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="description" className="text-right">
+                    Description
+                  </Label>
+                  <Textarea 
+                    id="description"
+                    value={newTask.description}
+                    onChange={(e) => setNewTask({...newTask, description: e.target.value})}
+                    className="col-span-3" 
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="type" className="text-right">
+                    Type
+                  </Label>
+                  <Select 
+                    value={newTask.type}
+                    onValueChange={(value) => setNewTask({...newTask, type: value})}
+                  >
+                    <SelectTrigger className="col-span-3">
+                      <SelectValue placeholder="Select task type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="assignment">Assignment</SelectItem>
+                      <SelectItem value="quiz">Quiz</SelectItem>
+                      <SelectItem value="project">Project</SelectItem>
+                      <SelectItem value="lab">Lab Task</SelectItem>
+                      <SelectItem value="material">Study Material</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="points" className="text-right">
+                    Points
+                  </Label>
+                  <Input 
+                    id="points"
+                    type="number"
+                    value={newTask.points}
+                    onChange={(e) => setNewTask({...newTask, points: Number(e.target.value)})}
+                    className="col-span-3" 
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="dueDate" className="text-right">
+                    Due Date
+                  </Label>
+                  <Input 
+                    id="dueDate"
+                    type="date"
+                    value={newTask.dueDate}
+                    onChange={(e) => setNewTask({...newTask, dueDate: e.target.value})}
+                    className="col-span-3" 
+                  />
+                </div>
+                {/* Debug: Show courseId in the form */}
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label className="text-right">Course ID</Label>
+                  <div className="col-span-3 text-sm text-gray-600">
+                    {courseId || 'Not available'}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setIsCreateTaskModalOpen(false)}>Cancel</Button>
-              <Button 
-                onClick={handleCreateTask} 
-                disabled={isLoading || !courseId}
-              >
-                {isLoading ? 'Creating...' : 'Create Task'}
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+              <div className="flex justify-end space-x-2">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setIsCreateTaskModalOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  onClick={handleCreateTask} 
+                  disabled={isLoading || !courseId}
+                >
+                  {isLoading ? 'Creating...' : 'Create Task'}
+                </Button>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
 
       {/* Rest of the component remains unchanged */}
